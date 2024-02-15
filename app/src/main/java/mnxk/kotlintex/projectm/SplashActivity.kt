@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +8,9 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mnxk.kotlintex.projectm.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -40,5 +44,18 @@ class SplashActivity : AppCompatActivity() {
         // Load the font
         val typeFace: Typeface = Typeface.createFromAsset(assets, "DFVN_BridgeType_Regular.ttf")
         binding.splashScreenTitle.typeface = typeFace
+
+        // Start the MainActivity after 2 seconds
+        // Hanler was deprecated
+//        Handler().postDelayed({
+//            startActivity(Intent(this, IntroActivity::class.java))
+//            finish()
+//        }, 2000)
+        // Using Coroutine instead of the deprecated Handler
+        GlobalScope.launch { // launch a new coroutine in background and continue
+            delay(2000L) // non-blocking delay for 2 seconds
+            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            finish()
+        }
     }
 }
