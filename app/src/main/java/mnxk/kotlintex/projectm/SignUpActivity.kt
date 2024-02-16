@@ -55,11 +55,11 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     // Restore the user input when the activity is created
-    override fun onResume() {
-        super.onResume()
-        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        binding.etNameSignUp.setText(sharedPref.getString("name", ""))
-        binding.etEmailSignUp.setText(sharedPref.getString("email", ""))
-        binding.etPasswordSignUp.setText(sharedPref.getString("password", ""))
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+//        binding.etNameSignUp.setText(sharedPref.getString("name", ""))
+//        binding.etEmailSignUp.setText(sharedPref.getString("email", ""))
+//        binding.etPasswordSignUp.setText(sharedPref.getString("password", ""))
+//    }
 }

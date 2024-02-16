@@ -1,6 +1,5 @@
 package mnxk.kotlintex.projectm
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import mnxk.kotlintex.projectm.databinding.ActivitySignInBinding
@@ -16,7 +15,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarSignUp)
+        setSupportActionBar(binding.toolbarSignIn)
         val actionBar = supportActionBar
         if (actionBar != null) {
             // Show the back button in action bar
@@ -30,12 +29,12 @@ class SignInActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onPause() {
-        super.onPause()
-        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString("email", binding.etEmailSignIn.text.toString())
-        editor.putString("password", binding.etPasswordSignIn.text.toString())
-        editor.apply()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        val sharedPref = getSharedPreferences("user_data_signin", Context.MODE_PRIVATE)
+//        val editor = sharedPref.edit()
+//        editor.putString("email", binding.etEmailSignIn.text.toString())
+//        editor.putString("password", binding.etPasswordSignIn.text.toString())
+//        editor.apply()
+//    }
 }
