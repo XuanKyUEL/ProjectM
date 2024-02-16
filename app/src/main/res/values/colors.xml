@@ -18,4 +18,5 @@
     <color name="primary_text_color">#363A43</color>
     <color name="secondary_text_color">#7A8089</color>
     <!-- END -->
+    <color name="snackbar_error_background">#B00020</color>
 </resources>

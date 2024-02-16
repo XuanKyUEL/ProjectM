@@ -3,10 +3,9 @@ package mnxk.kotlintex.projectm.activities
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import mnxk.kotlintex.projectm.databinding.ActivityIntroBinding
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity() {
     private lateinit var binding: ActivityIntroBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
