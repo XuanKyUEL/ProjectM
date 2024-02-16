@@ -1,11 +1,20 @@
 package mnxk.kotlintex.projectm
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Typeface
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import mnxk.kotlintex.projectm.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityIntroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+//        setContentView(R.layout.activity_intro)
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val typeFace = Typeface.createFromAsset(assets, "DFVN_BridgeType_Regular.ttf")
+        binding.tvAppNameIntro.typeface = typeFace
     }
 }
