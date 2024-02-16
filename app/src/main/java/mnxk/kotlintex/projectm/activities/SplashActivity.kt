@@ -1,4 +1,4 @@
-package mnxk.kotlintex.projectm
+package mnxk.kotlintex.projectm.activities
 
 import android.content.Intent
 import android.graphics.Typeface
