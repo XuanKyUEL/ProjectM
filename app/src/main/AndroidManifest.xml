@@ -13,14 +13,19 @@
         android:theme="@style/Theme.ProjectM"
         tools:targetApi="31">
         <activity
-            android:name=".IntroActivity"
+            android:name=".SignUpActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".IntroActivity"
+            android:exported="false"
             android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
             android:exported="true"
+            android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +37,7 @@
             android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ProjectM"></activity>
+            android:theme="@style/Theme.ProjectM" />
     </application>
 
 </manifest>
