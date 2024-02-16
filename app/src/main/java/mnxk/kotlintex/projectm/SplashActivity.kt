@@ -53,7 +53,7 @@ class SplashActivity : AppCompatActivity() {
 //        }, 2000)
         // Using Coroutine instead of the deprecated Handler
         GlobalScope.launch { // launch a new coroutine in background and continue
-            delay(2000L) // non-blocking delay for 2 seconds
+            delay(2400L) // non-blocking delay for 2 seconds
             startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
             finish()
         }
