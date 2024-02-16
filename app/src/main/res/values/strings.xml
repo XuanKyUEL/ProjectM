@@ -7,8 +7,9 @@
         on ProjectM’s Minimalist Interface.</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
-    <string name="sign_up_description">Enter your name, email id and password, to register with us.</string>
-    <string name="full_name">Full name</string>
+    <string name="sign_up_description">Enter your name, email and password, to register with us.</string>
+    <string name="sign_in_description">Enter your email and password, to sign in to your account.</string>
+    <string name="user_name">User name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
 </resources>
