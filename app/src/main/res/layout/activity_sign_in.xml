@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity"
     android:orientation="vertical"
-    android:background="@drawable/sign_in_up_bg">
+    android:background="@drawable/sign_in_up_bg"
+    tools:context=".SignInActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_sign_up"
+        android:id="@+id/toolbar_sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,11 +17,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tv_title_sign_in"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/sign_up"
+            android:text="@string/sign_in"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -35,7 +35,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_sign_up">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_sign_in">
 
         <TextView
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:gravity="center"
-            android:text="@string/sign_up_description"
+            android:text="@string/sign_in_description"
             android:textColor="@color/primary_text_color"
             android:textSize="16sp" />
 
@@ -62,7 +62,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Add the TextInputLayout for the name -->
                 <!-- TODO (Step 3: Add the email and password fields in the sign up screen.) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -73,25 +72,7 @@
                     android:paddingBottom="8dp">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_name_sign_up"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/user_name"
-                        android:inputType="text"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_email_sign_up"
+                        android:id="@+id/et_email_sign_in"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
@@ -109,7 +90,7 @@
                     android:paddingBottom="8dp">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_password_sign_up"
+                        android:id="@+id/et_password_sign_in"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
@@ -118,7 +99,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/btn_sign_up"
+                    android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -126,11 +107,10 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/shape_btn_rounded"
-                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:text="@string/sign_up"
+                    android:text="@string/sign_in"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </LinearLayout>
