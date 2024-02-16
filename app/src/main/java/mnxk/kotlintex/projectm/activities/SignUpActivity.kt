@@ -1,8 +1,9 @@
-package mnxk.kotlintex.projectm
+package mnxk.kotlintex.projectm.activities
 
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
