@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,5 +17,9 @@ class IntroActivity : AppCompatActivity() {
 
         val typeFace = Typeface.createFromAsset(assets, "DFVN_BridgeType_Regular.ttf")
         binding.tvAppNameIntro.typeface = typeFace
+
+        binding.btnSignUpIntro.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+        }
     }
 }
