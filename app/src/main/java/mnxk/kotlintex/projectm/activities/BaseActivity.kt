@@ -18,13 +18,16 @@ open class BaseActivity : AppCompatActivity() {
 
     private lateinit var mProgressDialog: Dialog
     private var binding: ActivityBaseBinding? = null
-    private var dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
+
+//    private var dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
+    private lateinit var dialogBinding: DialogCustomProgressBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_base)
         binding = ActivityBaseBinding.inflate(layoutInflater)
-//        setContentView(binding!!.root)
+        setContentView(binding!!.root)
+        dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
     }
 
     fun showProgessDialog(text: String) {

@@ -2,11 +2,13 @@ package mnxk.kotlintex.projectm.activities
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivitySignUpBinding
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
     private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,9 @@ class SignUpActivity : AppCompatActivity() {
             // Show the back button in action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
+        }
+        binding.btnSignUp.setOnClickListener {
+            registerUser()
         }
     }
 
@@ -54,12 +59,59 @@ class SignUpActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // Restore the user input when the activity is created
-//    override fun onResume() {
-//        super.onResume()
-//        val sharedPref = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-//        binding.etNameSignUp.setText(sharedPref.getString("name", ""))
-//        binding.etEmailSignUp.setText(sharedPref.getString("email", ""))
-//        binding.etPasswordSignUp.setText(sharedPref.getString("password", ""))
-//    }
+    private fun registerUser() {
+        // Get the text from the EditText and remove the leading and trailing white spaces
+        val name: String = binding.etNameSignUp.text.toString().trim { it <= ' ' }
+        val email: String = binding.etEmailSignUp.text.toString().trim { it <= ' ' }
+        val password: String = binding.etPasswordSignUp.text.toString().trim { it <= ' ' }
+
+        if (validateForm(name, email, password)) {
+            showProgessDialog(resources.getString(R.string.please_wait))
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    hideProgressDialog()
+                    if (task.isSuccessful) {
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+                        val registeredEmail = firebaseUser.email!!
+                        Toast.makeText(
+                            this,
+                            "$name you have successfully registered the email address $registeredEmail",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            task.exception!!.message.toString(),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                }
+        }
+    }
+
+    private fun validateForm(
+        name: String,
+        email: String,
+        password: String,
+    ): Boolean {
+        return when {
+            name.isEmpty() -> {
+                showErrorSnackBar("Please enter your name")
+                false
+            }
+            email.isEmpty() -> {
+                showErrorSnackBar("Please enter your email address")
+                false
+            }
+            password.isEmpty() -> {
+                showErrorSnackBar("Please enter your password")
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
 }

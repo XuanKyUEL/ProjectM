@@ -14,4 +14,10 @@
     <string name="password">Password</string>
     <string name="please_wait">Please wait&#8230;</string>
     <string name="please_click_back_again_to_exit">Please click back again to exit</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="no_internet_connection_message">Please check your internet connection and try again</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">Error</string>
+    <string name="please_wait_message">Please wait while we process your request</string>
 </resources>
