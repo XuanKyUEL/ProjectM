@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivitySignInBinding
+import mnxk.kotlintex.projectm.models.User
 
 class SignInActivity : BaseActivity() {
     private lateinit var binding: ActivitySignInBinding
@@ -50,7 +51,6 @@ class SignInActivity : BaseActivity() {
             showProgessDialog("Please wait...")
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
-                    hideProgressDialog()
                     if (task.isSuccessful) {
                         Log.d(TAG, "signInWithEmail:success")
                         val user = auth.currentUser
@@ -81,6 +81,12 @@ class SignInActivity : BaseActivity() {
                 true
             }
         }
+    }
+
+    fun signInSuccess(loggedInUser: User) {
+        hideProgressDialog()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
 //    override fun onPause() {

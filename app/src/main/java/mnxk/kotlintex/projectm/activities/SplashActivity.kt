@@ -8,14 +8,17 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mnxk.kotlintex.projectm.databinding.ActivitySplashBinding
+import mnxk.kotlintex.projectm.firebase.fireStoreClass
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
 
+    @OptIn(DelicateCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -52,10 +55,17 @@ class SplashActivity : AppCompatActivity() {
 //            finish()
 //        }, 2000)
         // Using Coroutine instead of the deprecated Handler
+        val fireStoreClass = fireStoreClass()
+        var currentUserId = fireStoreClass.getCurrentUserId()
         GlobalScope.launch { // launch a new coroutine in background and continue
-            delay(2400L) // non-blocking delay for 2 seconds
-            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
-            finish()
+            if (currentUserId.isNotEmpty()) {
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                finish()
+            } else {
+                delay(2400L) // non-blocking delay for 2 seconds
+                startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+                finish()
+            }
         }
     }
 }
