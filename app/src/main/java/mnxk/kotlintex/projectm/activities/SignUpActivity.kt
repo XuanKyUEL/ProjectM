@@ -80,11 +80,13 @@ class SignUpActivity : BaseActivity() {
             showProgessDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
+
                     if (task.isSuccessful) {
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val registeredEmail = firebaseUser.email!!
                         val user = User(firebaseUser.uid, name, registeredEmail)
                         fireStoreClass().registerUser(this, user)
+                        finish()
                     } else {
                         Toast.makeText(
                             this,
