@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivitySignUpBinding
+import mnxk.kotlintex.projectm.firebase.fireStoreClass
+import mnxk.kotlintex.projectm.models.User
 
 class SignUpActivity : BaseActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -31,6 +33,15 @@ class SignUpActivity : BaseActivity() {
         binding.btnSignUp.setOnClickListener {
             registerUser()
         }
+    }
+
+    fun userRegistrationSuccess() {
+        Toast.makeText(
+            this,
+            "You have successfully registered",
+            Toast.LENGTH_SHORT,
+        ).show()
+        hideProgressDialog()
     }
 
     // Todo: Handle the back button click
@@ -69,16 +80,12 @@ class SignUpActivity : BaseActivity() {
             showProgessDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    hideProgressDialog()
+
                     if (task.isSuccessful) {
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val registeredEmail = firebaseUser.email!!
-                        Toast.makeText(
-                            this,
-                            "$name you have successfully registered the email address $registeredEmail",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        FirebaseAuth.getInstance().signOut()
+                        val user = User(firebaseUser.uid, name, registeredEmail)
+                        fireStoreClass().registerUser(this, user)
                         finish()
                     } else {
                         Toast.makeText(
