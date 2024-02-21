@@ -1,6 +1,7 @@
 package mnxk.kotlintex.projectm.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -75,6 +76,7 @@ class SignUpActivity : BaseActivity() {
         val name: String = binding.etNameSignUp.text.toString().trim { it <= ' ' }
         val email: String = binding.etEmailSignUp.text.toString().trim { it <= ' ' }
         val password: String = binding.etPasswordSignUp.text.toString().trim { it <= ' ' }
+        val intent = Intent(this, IntroActivity::class.java)
 
         if (validateForm(name, email, password)) {
             showProgessDialog(resources.getString(R.string.please_wait))
@@ -86,7 +88,8 @@ class SignUpActivity : BaseActivity() {
                         val registeredEmail = firebaseUser.email!!
                         val user = User(firebaseUser.uid, name, registeredEmail)
                         fireStoreClass().registerUser(this, user)
-                        finish()
+                        // TODO : Back to the previous activity
+                        startActivity(intent)
                     } else {
                         Toast.makeText(
                             this,
