@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_header_main"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_of_nav_main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,6 +11,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_user_image"
         android:layout_width="@dimen/nav_image_size"
         android:layout_height="@dimen/nav_image_size"
         android:layout_marginStart="@dimen/nav_content_margin_StartEnd"
@@ -23,11 +25,10 @@
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/app_name"
         android:layout_marginTop="@dimen/nav_content_margin_top"
-        android:text="@string/user_name"
         android:textColor="@color/white"
-        android:textSize="@dimen/nav_user_name_text_size"
-        tools:text = "Username"/>
+        android:textSize="@dimen/nav_user_name_text_size" />
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_divider_height"
