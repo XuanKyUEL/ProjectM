@@ -1,18 +1,29 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import mnxk.kotlintex.projectm.R
-import mnxk.kotlintex.projectm.ui.theme.ProjectMTheme
+import mnxk.kotlintex.projectm.databinding.ActivityMainBinding
+import mnxk.kotlintex.projectm.databinding.AppBarMainBinding
 
-class MainActivity : ComponentActivity() {
+class MainActivity :
+    BaseActivity(),
+    NavigationView.OnNavigationItemSelectedListener {
+    private var binding: ActivityMainBinding? = null
+    private var binding2: AppBarMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+        binding2 = binding?.appBarMain
+        setupActionBar()
+        binding?.navView?.setNavigationItemSelectedListener(this)
 //        setContent {
 //            ProjectMTheme {
 //                // A surface container using the 'background' color from the theme
@@ -25,23 +36,50 @@ class MainActivity : ComponentActivity() {
 //            }
 //        }
     }
-}
 
-@Composable
-fun Greeting(
-    name: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-    )
-}
+    private fun setupActionBar() {
+        setSupportActionBar(binding2?.toolbar)
+        binding2?.toolbar?.setNavigationIcon(R.drawable.ic_action_nav_on_menu)
+        // Add click event to the navigation icon
+        binding2?.toolbar?.setNavigationOnClickListener {
+            // Navigate back to the previous activity
+            toggleDrawer()
+        }
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ProjectMTheme {
-        Greeting("Android")
+    private fun toggleDrawer() {
+        if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+            binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+        } else {
+            binding?.drawerLayout?.openDrawer(GravityCompat.START)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+            binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+        } else {
+            doubleBackToExit()
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_my_profile -> {
+                Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
+                // Navigate to the My Profile screen
+            }
+            R.id.nav_sign_out -> {
+                // Sign out the user
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this, IntroActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                finish()
+            }
+        }
+        binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+        return true
     }
 }
