@@ -2,6 +2,7 @@ package mnxk.kotlintex.projectm.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -12,6 +13,7 @@ import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityMainBinding
 import mnxk.kotlintex.projectm.databinding.AppBarMainBinding
 import mnxk.kotlintex.projectm.databinding.NavHeaderMainBinding
+import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.User
 
 class MainActivity :
@@ -40,6 +42,8 @@ class MainActivity :
 //                }
 //            }
 //        }
+        val fireStoreClass = fireStoreClass()
+        fireStoreClass.checkLoggedInUser(this)
     }
 
     private fun setupActionBar() {
@@ -65,7 +69,9 @@ class MainActivity :
         if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
             binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         } else {
-            doubleBackToExit()
+            if (isProgressDialogInitialized()) {
+                doubleBackToExit()
+            }
         }
     }
 
@@ -82,7 +88,7 @@ class MainActivity :
                 val intent = Intent(this, IntroActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
-//                finish()
+                finish()
             }
         }
         binding?.drawerLayout?.closeDrawer(GravityCompat.START)
@@ -90,11 +96,14 @@ class MainActivity :
     }
 
     fun updateNavigationUserDetails(loggedInUser: User) {
+        Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.name}.")
+
         val viewHeader = binding?.navView?.getHeaderView(0)
         val headerBinding = viewHeader?.let { NavHeaderMainBinding.bind(it) }
         val imageViewfinder = headerBinding?.civUserImage
         headerBinding?.navHeaderMain.let {
             if (imageViewfinder != null) {
+                Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.id}.")
                 Glide
                     .with(this)
                     .load(loggedInUser.image) // URL of the image
@@ -103,7 +112,7 @@ class MainActivity :
                     .into(imageViewfinder)
             } // the view in which the image will be loaded.
         } // the view in which the image will be loaded.
-
+        Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.name}.")
         headerBinding?.tvUserName?.text = loggedInUser.name
     }
 }

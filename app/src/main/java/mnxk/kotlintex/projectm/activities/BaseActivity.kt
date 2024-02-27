@@ -16,7 +16,7 @@ open class BaseActivity : AppCompatActivity() {
     // A double back press to exit the app
     private var doubleBackToExitPressedOnce = false
 
-    private lateinit var mProgressDialog: Dialog
+    lateinit var mProgressDialog: Dialog
     private var binding: ActivityBaseBinding? = null
 
 //    private var dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
@@ -29,6 +29,8 @@ open class BaseActivity : AppCompatActivity() {
         setContentView(binding!!.root)
         dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
     }
+
+    protected fun isProgressDialogInitialized() = ::mProgressDialog.isInitialized
 
     fun showProgessDialog(text: String) {
         mProgressDialog = Dialog(this)
@@ -63,7 +65,9 @@ open class BaseActivity : AppCompatActivity() {
 //        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
 //        executor.schedule({ doubleBackToExitPressedOnce = false }, 2000, MILLISECONDS)
         executor.schedule({ doubleBackToExitPressedOnce = false }, 2, SECONDS)
-        hideProgressDialog()
+        if (isProgressDialogInitialized()) {
+            hideProgressDialog()
+        }
     }
 
     fun showErrorSnackBar(message: String) {
