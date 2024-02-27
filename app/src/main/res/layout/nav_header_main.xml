@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header_main"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_of_nav_main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/nav_header_main_background"
-    android:gravity="bottom"
-    android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
-    
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_user_image"
         android:layout_width="@dimen/nav_image_size"
         android:layout_height="@dimen/nav_image_size"
-        android:layout_marginStart="@dimen/nav_content_margin_StartEnd"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="92dp"
         android:layout_marginEnd="@dimen/nav_content_margin_StartEnd"
+        android:contentDescription="@string/image_contentDescription"
+        android:src="@drawable/mnxk_landmark"
         app:civ_border_color="@color/white"
         app:civ_border_width="@dimen/nav_image_circular_border_width"
-        android:contentDescription="@string/image_contentDescription"
-        android:src="@drawable/mnxk_landmark" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:layout_marginTop="@dimen/nav_content_margin_top"
         android:textColor="@color/white"
-        android:textSize="@dimen/nav_user_name_text_size" />
+        android:textSize="@dimen/nav_user_name_text_size"
+        app:layout_constraintEnd_toEndOf="@id/civ_user_image"
+        app:layout_constraintStart_toStartOf="@id/civ_user_image"
+        app:layout_constraintTop_toBottomOf="@id/civ_user_image" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_divider_height"
-        android:background="@color/colorAccent"/>
-</LinearLayout>
+        android:background="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
