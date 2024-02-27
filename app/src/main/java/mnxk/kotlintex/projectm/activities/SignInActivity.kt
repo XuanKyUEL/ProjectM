@@ -62,6 +62,7 @@ class SignInActivity : BaseActivity() {
                             "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
+                        hideProgressDialog()
                     }
                 }
         }
@@ -97,4 +98,11 @@ class SignInActivity : BaseActivity() {
 //        editor.putString("password", binding.etPasswordSignIn.text.toString())
 //        editor.apply()
 //    }
+    // Fix leak window
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isProgressDialogInitialized()) {
+            hideProgressDialog()
+        }
+    }
 }
