@@ -80,6 +80,8 @@ class MainActivity :
             R.id.nav_my_profile -> {
                 Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
                 // Navigate to the My Profile screen
+                val intent = Intent(this, MyProfileActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.nav_sign_out -> {
