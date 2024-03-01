@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.ProjectM.AppBarOverlay">
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
@@ -49,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/my_profile_name_til_marginTop">
                     <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
@@ -62,11 +64,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/my_profile_et_email_marginTop">
                     <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
-                        android:textColor="@color/black"
+                        android:textColor="@color/secondary_text_color"
                         android:textSize="@dimen/intro_text_size"
                         android:textColorHint="@color/secondary_text_color"
                         android:enabled="false" />
@@ -102,7 +105,5 @@
                     android:paddingBottom="@dimen/btn_paddingTopBottom"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-
     </LinearLayout>
 </LinearLayout>
