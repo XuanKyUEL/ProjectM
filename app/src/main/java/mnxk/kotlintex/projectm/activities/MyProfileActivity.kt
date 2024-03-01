@@ -18,11 +18,13 @@ import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityMyProfileBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.User
+import mnxk.kotlintex.projectm.utils.Constants
 
 class MyProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityMyProfileBinding
     private var imageUri: Uri? = null
     private var profileImageURL: String = ""
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,12 @@ class MyProfileActivity : BaseActivity() {
             openImageChooser()
         }
         binding.btnUpdate.setOnClickListener {
-            uploadUserImage()
+            if (imageUri != null) {
+                uploadUserImage()
+            } else {
+                showProgessDialog("Please wait...")
+                updateUserProfileData()
+            }
         }
     }
 
@@ -129,6 +136,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     fun setUserDataInUI(user: User) {
+        this.user = user
         Glide
             .with(this)
             .load(user.image)
@@ -142,6 +150,24 @@ class MyProfileActivity : BaseActivity() {
         }
         // Set action bar title to the user's name
         supportActionBar?.title = "${user.name}'s Profile"
+    }
+
+    fun updateUserProfileData() {
+        val userHashMap = HashMap<String, Any>()
+        val name: String = binding.etName.text.toString().trim { it <= ' ' }
+        if (name != user.name) {
+            userHashMap[Constants.NAME] = name
+        }
+        val mobileNumber: Long = binding.etMobileNumber.text.toString().toLong()
+        if (mobileNumber != user.mobile) {
+            userHashMap[Constants.MOBILE] = mobileNumber
+        }
+        if (profileImageURL.isNotEmpty()) {
+            userHashMap[Constants.IMAGE] = profileImageURL
+        }
+        if (userHashMap.isNotEmpty()) {
+            fireStoreClass().updateUserProfileData(this, userHashMap)
+        }
     }
 
     private fun getFileExtension(uri: Uri?): String? {
@@ -164,8 +190,7 @@ class MyProfileActivity : BaseActivity() {
                         .addOnSuccessListener { uri ->
                             Log.e("Downloadable Image URL", uri.toString())
                             profileImageURL = uri.toString()
-                            hideProgressDialog()
-                            // TODO Update the user's profile image URL in the database.
+                            updateUserProfileData()
                         }
                         .addOnFailureListener { exception ->
                             Log.e("Firebase Storage", "Failed to get download URL: ${exception.message}")
@@ -177,5 +202,12 @@ class MyProfileActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    fun userProfileUpdateSuccess(): Void? {
+        hideProgressDialog()
+        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+        finish()
+        return null
     }
 }

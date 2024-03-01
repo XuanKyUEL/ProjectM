@@ -2,6 +2,7 @@ package mnxk.kotlintex.projectm.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -52,6 +53,31 @@ class fireStoreClass {
             currentUserID = currentUser.uid
         }
         return currentUserID
+    }
+
+    fun updateUserProfileData(
+        activity: MyProfileActivity,
+        userHashMap: HashMap<String, Any>,
+    ) {
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserId())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                activity.userProfileUpdateSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while updating the user details.",
+                    e,
+                )
+                Toast.makeText(
+                    activity,
+                    "Error when updating the user details.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
     }
 
     fun loadUserData(activity: Activity) {
