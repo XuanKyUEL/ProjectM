@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
@@ -23,6 +24,17 @@ class MainActivity :
     private var binding2: AppBarMainBinding? = null
     private var binding3: NavigationView? = null
 
+    private val startForResult =
+        this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                val fireStoreClass = fireStoreClass()
+                fireStoreClass.loadUserData(this)
+            } else {
+                Log.e("Cancelled", "Cancelled with result code: ${result.resultCode} and intent data: ${result.data}")
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,17 +43,6 @@ class MainActivity :
         binding3 = binding?.navView
         setupActionBar()
         binding?.navView?.setNavigationItemSelectedListener(this)
-//        setContent {
-//            ProjectMTheme {
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background,
-//                ) {
-//                    Greeting("Android")
-//                }
-//            }
-//        }
         val fireStoreClass = fireStoreClass()
         fireStoreClass.checkLoggedInUser(this)
     }
@@ -81,7 +82,7 @@ class MainActivity :
                 Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
                 // Navigate to the My Profile screen
                 val intent = Intent(this, MyProfileActivity::class.java)
-                startActivity(intent)
+                startForResult.launch(intent)
             }
 
             R.id.nav_sign_out -> {
