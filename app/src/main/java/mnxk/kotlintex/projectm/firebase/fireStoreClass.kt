@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import mnxk.kotlintex.projectm.activities.MainActivity
+import mnxk.kotlintex.projectm.activities.MyProfileActivity
 import mnxk.kotlintex.projectm.activities.SignInActivity
 import mnxk.kotlintex.projectm.activities.SignUpActivity
 import mnxk.kotlintex.projectm.models.User
@@ -53,11 +54,7 @@ class fireStoreClass {
         return currentUserID
     }
 
-    fun sigInUser(
-        activity: Activity,
-        email: String,
-        password: String,
-    ) {
+    fun loadUserData(activity: Activity) {
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .get()
@@ -70,6 +67,9 @@ class fireStoreClass {
                     }
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                    is MyProfileActivity -> {
+                        activity.setUserDataInUI(loggedInUser)
                     }
                 }
             }
