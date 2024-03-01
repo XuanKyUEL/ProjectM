@@ -68,12 +68,38 @@
                         android:inputType="textEmailAddress"
                         android:textColor="@color/black"
                         android:textSize="@dimen/intro_text_size"
-                        android:textColorHint="@color/secondary_text_color" />
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    </androidx.appcompat.widget.AppCompatEditText>
+                        android:textColorHint="@color/secondary_text_color"
+                        android:enabled="false" />
                 </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/my_profile_et_mobile_marginTop">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/et_mobile_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/phone_number"
+                            android:inputType="phone"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/intro_text_size"
+                            android:textColorHint="@color/secondary_text_color" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/btn_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/my_profile_btn_update_marginTop"
+                    android:layout_marginStart="@dimen/btn_marginStartEnd"
+                    android:layout_marginEnd="@dimen/btn_marginStartEnd"
+                    android:text="@string/update"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_text_size"
+                    android:background="@drawable/shape_btn_rounded"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_paddingTopBottom"
+                    android:paddingBottom="@dimen/btn_paddingTopBottom"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

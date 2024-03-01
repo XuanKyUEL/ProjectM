@@ -27,4 +27,7 @@
     <string name="nav_share">Share</string>
     <string name="hello_world">Hello world!</string>
     <string name="name">Name</string>
+
+    <string name="phone_number">Phone Number</string>
+    <string name="update">Update</string>
 </resources>
