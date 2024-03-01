@@ -3,13 +3,17 @@ package mnxk.kotlintex.projectm.activities
 import android.Manifest.*
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityMyProfileBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
@@ -17,6 +21,8 @@ import mnxk.kotlintex.projectm.models.User
 
 class MyProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityMyProfileBinding
+    private var imageUri: Uri? = null
+    private var profileImageURL: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,9 @@ class MyProfileActivity : BaseActivity() {
         fireStoreClass().loadUserData(this)
         binding.civProfileImage.setOnClickListener {
             openImageChooser()
+        }
+        binding.btnUpdate.setOnClickListener {
+            uploadUserImage()
         }
     }
 
@@ -62,11 +71,11 @@ class MyProfileActivity : BaseActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 if (result.data != null) {
+                    imageUri = result.data!!.data!!
                     try {
-                        val selectedImageUri = result.data!!.data!!
                         Glide
                             .with(this)
-                            .load(selectedImageUri)
+                            .load(imageUri)
                             .centerCrop()
                             .placeholder(R.drawable.ic_user_place_holder)
                             .into(binding.civProfileImage)
@@ -100,9 +109,10 @@ class MyProfileActivity : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         val actionBar = supportActionBar
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = resources.getString(R.string.my_profile_title)
+            actionBar.run {
+                setDisplayHomeAsUpEnabled(true)
+                setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            }
         }
 //        binding.toolbar.setOnClickListener {
 // //            onBackPressed()
@@ -132,5 +142,40 @@ class MyProfileActivity : BaseActivity() {
         }
         // Set action bar title to the user's name
         supportActionBar?.title = "${user.name}'s Profile"
+    }
+
+    private fun getFileExtension(uri: Uri?): String? {
+        return MimeTypeMap
+            .getSingleton()
+            .getExtensionFromMimeType(contentResolver.getType(uri!!))
+    }
+
+    private fun uploadUserImage() {
+        showProgessDialog("Please wait...")
+        if (imageUri != null) {
+            val sRef: StorageReference =
+                FirebaseStorage.getInstance().reference.child(
+                    "USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(imageUri),
+                )
+
+            sRef.putFile(imageUri!!).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            Log.e("Downloadable Image URL", uri.toString())
+                            profileImageURL = uri.toString()
+                            hideProgressDialog()
+                            // TODO Update the user's profile image URL in the database.
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("Firebase Storage", "Failed to get download URL: ${exception.message}")
+                        }
+                } else {
+                    Toast.makeText(this@MyProfileActivity, task.exception?.message, Toast.LENGTH_LONG).show()
+                    Log.e("Image Upload Error", task.exception?.message, task.exception)
+                    hideProgressDialog()
+                }
+            }
+        }
     }
 }
