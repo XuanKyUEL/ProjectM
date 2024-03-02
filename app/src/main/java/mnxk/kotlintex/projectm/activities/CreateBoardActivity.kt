@@ -2,25 +2,20 @@ package mnxk.kotlintex.projectm.activities
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityCreateBoardBinding
 import mnxk.kotlintex.projectm.models.PermissionValidate
 
-class CreateBoardActivity : AppCompatActivity() {
+class CreateBoardActivity : BaseActivity() {
     private lateinit var binding: ActivityCreateBoardBinding
     private val permissionValidator = PermissionValidate(this)
-
-    private var imageUri: Any? = null
 
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -62,22 +57,11 @@ class CreateBoardActivity : AppCompatActivity() {
         mainEvents()
     }
 
-    private fun openImageChooser() {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_IMAGES,
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                val intent =
-                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "image/*"
-                    }
-                imagePickerActivityResult.launch(intent)
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-            }
+    override fun onImagePicked() {
+        try {
+            binding.civBoardImage.setImageURI(imageUri)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
