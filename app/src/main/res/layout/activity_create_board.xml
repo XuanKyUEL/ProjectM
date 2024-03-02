@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CreateBoardActivity"
+    android:orientation="vertical">
+    
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.ProjectM.AppBarOverlay">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/Theme.ProjectM.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_screen_gradient_bg"
+        android:padding="@dimen/create_board_content_padding"
+        android:orientation="vertical"
+        android:gravity="center">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/create_board_content_padding"
+            android:layout_marginTop="@dimen/create_board_content_padding"
+            android:layout_marginEnd="@dimen/create_board_content_padding"
+            android:layout_marginBottom="@dimen/create_board_content_padding"
+            android:elevation="10dp"
+            app:cardCornerRadius="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/card_view_layout_content_padding">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_board_image"
+                    android:layout_width="@dimen/board_image_size"
+                    android:layout_height="@dimen/board_image_size"
+                    android:contentDescription="@string/image_contentDescription"
+                    android:src="@drawable/ic_board_place_holder" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/create_board_til_marginTop">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_board_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/board_name"
+                        android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/et_text_size"
+                        android:textColorHint="@color/secondary_text_color" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/btn_create"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/create_board_btn_marginTop"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/shape_btn_rounded"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/btn_text_size"
+                    android:paddingBottom="@dimen/btn_paddingTopBottom"
+                    android:paddingTop="@dimen/btn_paddingTopBottom"
+                    android:text="@string/create" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>
