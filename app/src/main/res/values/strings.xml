@@ -36,4 +36,6 @@
     <string name="create_board_description">Create a new board to start collaborating with your team.</string>
     <string name="board_name">Board Name</string>
     <string name="create">Create</string>
+    <string name="storage_permission_denied"> Storage Permission Denied</string>
+    <string name="storage_permission_required">Please allow storage permission</string>
 </resources>
