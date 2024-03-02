@@ -44,6 +44,10 @@ class MainActivity :
         binding?.navView?.setNavigationItemSelectedListener(this)
         val fireStoreClass = fireStoreClass()
         fireStoreClass.checkLoggedInUser(this)
+        binding2?.fabCreateBoard?.setOnClickListener {
+            val intent = Intent(this, CreateBoardActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {
