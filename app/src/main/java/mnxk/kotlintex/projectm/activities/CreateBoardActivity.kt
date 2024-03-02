@@ -31,6 +31,7 @@ class CreateBoardActivity : AppCompatActivity() {
             actionBar.run {
                 setDisplayHomeAsUpEnabled(true)
                 setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+                title = resources.getString(R.string.create_board_title)
             }
         }
     }
