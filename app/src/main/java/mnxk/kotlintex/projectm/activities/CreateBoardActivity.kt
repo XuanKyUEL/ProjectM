@@ -1,47 +1,23 @@
 package mnxk.kotlintex.projectm.activities
 
-import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityCreateBoardBinding
-import mnxk.kotlintex.projectm.models.PermissionValidate
+import mnxk.kotlintex.projectm.firebase.fireStoreClass
+import mnxk.kotlintex.projectm.models.Board
+import mnxk.kotlintex.projectm.utils.Constants
 
 class CreateBoardActivity : BaseActivity() {
     private lateinit var binding: ActivityCreateBoardBinding
-    private val permissionValidator = PermissionValidate(this)
-
-    private val requestPermissionLauncher: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                openImageChooser()
-            } else {
-                permissionValidator.requestPermission(
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    PermissionValidate.READ_STORAGE_PERMISSION_REQUEST_CODE,
-                )
-            }
-        }
-
-    private val imagePickerActivityResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                if (result.data != null) {
-                    imageUri = result.data!!.data!!
-                    try {
-                        binding.civBoardImage.setImageURI(imageUri as Uri)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        }
+    private lateinit var userName: String
+    private var boardImageUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +28,9 @@ class CreateBoardActivity : BaseActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        if (intent.hasExtra(Constants.NAME)) {
+            userName = intent.getStringExtra(Constants.NAME)!!
         }
         setupActionBar()
         mainEvents()
@@ -86,5 +65,75 @@ class CreateBoardActivity : BaseActivity() {
         binding.civBoardImage.setOnClickListener {
             openImageChooser()
         }
+        binding.btnCreate.setOnClickListener {
+            if (validateBoardDetails()) {
+                if (imageUri != null) {
+                    uploadBoardImage()
+                } else {
+                    showProgessDialog("Creating board...")
+                    createBoard()
+                }
+            }
+        }
+    }
+
+    private fun createBoard() {
+        val assignedUsersArrayList: ArrayList<String> = ArrayList()
+        assignedUsersArrayList.add(getCurrentUserId())
+        val board =
+            Board(
+                binding.etBoardName.text.toString(),
+                boardImageUrl.toString(),
+                userName,
+                assignedUsersArrayList,
+            )
+        fireStoreClass().createBoard(this, board)
+    }
+
+    private fun uploadBoardImage() {
+        showProgessDialog("Creating board...")
+        if (imageUri != null) {
+            val sRef: StorageReference =
+                FirebaseStorage.getInstance().reference.child(
+                    "BOARD_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(this, imageUri),
+                )
+
+            sRef.putFile(imageUri!!).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            Log.e("Downloadable Board Image URL", uri.toString())
+                            boardImageUrl = uri.toString()
+                            createBoard()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("Firebase Storage", "Failed to get download URL: ${exception.message}")
+                        }
+                } else {
+                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                    Log.e("Image Upload Error", task.exception?.message, task.exception)
+                    hideProgressDialog()
+                }
+            }
+        }
+    }
+
+    fun validateBoardDetails(): Boolean {
+        return when {
+            binding.etBoardName.text.toString().trim { it <= ' ' }.isEmpty() -> {
+                showErrorSnackBar("Please enter a name for the board.")
+                false
+            }
+            else -> {
+                true
+            }
+        }
+    }
+
+    fun boardCreatedSuccessfully() {
+        hideProgressDialog()
+        Toast.makeText(this, "Board created successfully", Toast.LENGTH_SHORT).show()
+        setResult(RESULT_OK)
+        finish()
     }
 }

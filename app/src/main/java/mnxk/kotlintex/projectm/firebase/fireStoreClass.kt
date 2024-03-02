@@ -6,10 +6,12 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import mnxk.kotlintex.projectm.activities.CreateBoardActivity
 import mnxk.kotlintex.projectm.activities.MainActivity
 import mnxk.kotlintex.projectm.activities.MyProfileActivity
 import mnxk.kotlintex.projectm.activities.SignInActivity
 import mnxk.kotlintex.projectm.activities.SignUpActivity
+import mnxk.kotlintex.projectm.models.Board
 import mnxk.kotlintex.projectm.models.User
 import mnxk.kotlintex.projectm.utils.Constants
 
@@ -109,6 +111,27 @@ class fireStoreClass {
                     }
                 }
                 Log.e("SignInUser", "Error writing document", e)
+            }
+    }
+
+    fun createBoard(
+        activity: CreateBoardActivity,
+        board: Board,
+    ) {
+        mFireStore.collection(Constants.BOARDS)
+            .document()
+            .set(board, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.boardCreatedSuccessfully()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
+                Toast.makeText(
+                    activity,
+                    "Error when creating a board.",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
     }
 }
