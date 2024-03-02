@@ -31,4 +31,9 @@
     <string name="phone_number">Phone Number</string>
     <string name="update">Update</string>
     <string name="my_profile_title">My Profile Title</string>
+
+    <string name="create_board_title">Create Board</string>
+    <string name="create_board_description">Create a new board to start collaborating with your team.</string>
+    <string name="board_name">Board Name</string>
+    <string name="create">Create</string>
 </resources>
