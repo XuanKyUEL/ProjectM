@@ -15,6 +15,7 @@ import mnxk.kotlintex.projectm.databinding.AppBarMainBinding
 import mnxk.kotlintex.projectm.databinding.NavHeaderMainBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.User
+import mnxk.kotlintex.projectm.utils.Constants
 
 class MainActivity :
     BaseActivity(),
@@ -34,6 +35,8 @@ class MainActivity :
             }
         }
 
+    private lateinit var userName: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,6 +49,7 @@ class MainActivity :
         fireStoreClass.checkLoggedInUser(this)
         binding2?.fabCreateBoard?.setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME, userName)
             startActivity(intent)
         }
     }
@@ -106,6 +110,7 @@ class MainActivity :
         val viewHeader = binding?.navView?.getHeaderView(0)
         val headerBinding = viewHeader?.let { NavHeaderMainBinding.bind(it) }
         val imageViewfinder = headerBinding?.civUserImage
+        userName = loggedInUser.name
         headerBinding?.navHeaderMain.let {
             if (imageViewfinder != null) {
                 Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.id}.")

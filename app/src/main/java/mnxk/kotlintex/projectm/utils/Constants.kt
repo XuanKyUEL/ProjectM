@@ -1,6 +1,7 @@
 package mnxk.kotlintex.projectm.utils
 
 object Constants {
+    const val BOARD_IMAGE: String = "board_image"
     const val USERS: String = "users"
     const val PROJECTM_PREFERENCES: String = "ProjectMPrefs"
     const val LOGGED_IN_USERNAME: String = "logged_in_username"
@@ -11,4 +12,5 @@ object Constants {
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
+    const val BOARDS = "boards"
 }
