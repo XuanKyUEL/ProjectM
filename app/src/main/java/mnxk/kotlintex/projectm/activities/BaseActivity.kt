@@ -1,9 +1,18 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar.*
 import com.google.firebase.auth.FirebaseAuth
 import mnxk.kotlintex.projectm.R
@@ -81,5 +90,58 @@ open class BaseActivity : AppCompatActivity() {
         snackbarView.setBackgroundColor(getColor(R.color.snackbar_error_background))
         snackBar.show()
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun getFileExtension(
+        activity: Activity,
+        uri: Uri?,
+    ): String? {
+        return MimeTypeMap
+            .getSingleton()
+            .getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
+    }
+
+    protected var imageUri: Uri? = null
+
+    private val imagePickerActivityResult: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                if (result.data != null) {
+                    imageUri = result.data!!.data!!
+                    onImagePicked()
+                }
+            }
+        }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                openImageChooser()
+            } else {
+                Toast.makeText(this, "Permission required to access images.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    protected open fun onImagePicked() {
+        // This method can be overridden in child classes to handle the image picked event
+    }
+
+    protected fun openImageChooser() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_IMAGES,
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                val intent =
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "image/*"
+                    }
+                imagePickerActivityResult.launch(intent)
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }
     }
 }

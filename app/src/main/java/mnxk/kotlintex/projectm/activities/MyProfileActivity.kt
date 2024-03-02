@@ -1,16 +1,8 @@
 package mnxk.kotlintex.projectm.activities
 
-import android.Manifest.*
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.webkit.MimeTypeMap
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -22,7 +14,6 @@ import mnxk.kotlintex.projectm.utils.Constants
 
 class MyProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityMyProfileBinding
-    private var imageUri: Uri? = null
     private var profileImageURL: String = ""
     private lateinit var user: User
 
@@ -65,50 +56,16 @@ class MyProfileActivity : BaseActivity() {
 //            }
 //        }
 //    }
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                openImageChooser()
-            } else {
-                Toast.makeText(this, "Permission required to access images.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    private val imagePickerActivityResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                if (result.data != null) {
-                    imageUri = result.data!!.data!!
-                    try {
-                        Glide
-                            .with(this)
-                            .load(imageUri)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_user_place_holder)
-                            .into(binding.civProfileImage)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        }
-
-    private fun openImageChooser() {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                permission.READ_MEDIA_IMAGES,
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                val intent =
-                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = "image/*"
-                    }
-                imagePickerActivityResult.launch(intent)
-            }
-            else -> {
-                requestPermissionLauncher.launch(permission.READ_MEDIA_IMAGES)
-            }
+    override fun onImagePicked() {
+        try {
+            Glide
+                .with(this)
+                .load(imageUri)
+                .centerCrop()
+                .placeholder(R.drawable.ic_user_place_holder)
+                .into(binding.civProfileImage)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -170,18 +127,12 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    private fun getFileExtension(uri: Uri?): String? {
-        return MimeTypeMap
-            .getSingleton()
-            .getExtensionFromMimeType(contentResolver.getType(uri!!))
-    }
-
     private fun uploadUserImage() {
         showProgessDialog("Please wait...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
-                    "USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(imageUri),
+                    "USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(this, imageUri),
                 )
 
             sRef.putFile(imageUri!!).addOnCompleteListener { task ->
