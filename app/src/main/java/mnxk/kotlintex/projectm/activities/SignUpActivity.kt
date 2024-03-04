@@ -76,7 +76,7 @@ class SignUpActivity : BaseActivity() {
         val name: String = binding.etNameSignUp.text.toString().trim { it <= ' ' }
         val email: String = binding.etEmailSignUp.text.toString().trim { it <= ' ' }
         val password: String = binding.etPasswordSignUp.text.toString().trim { it <= ' ' }
-        val intent = Intent(this, IntroActivity::class.java)
+        val intent = Intent(this, SignInActivity::class.java)
 
         if (validateForm(name, email, password)) {
             showProgessDialog(resources.getString(R.string.please_wait))
@@ -88,7 +88,8 @@ class SignUpActivity : BaseActivity() {
                         val registeredEmail = firebaseUser.email!!
                         val user = User(firebaseUser.uid, name, registeredEmail)
                         fireStoreClass().registerUser(this, user)
-                        // TODO : Back to the previous activity
+                        // TODO : Navigate the user to signInActivity
+                        intent.putExtra("email", email)
                         startActivity(intent)
                     } else {
                         Toast.makeText(
