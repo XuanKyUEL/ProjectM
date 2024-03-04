@@ -1,6 +1,7 @@
 package mnxk.kotlintex.projectm.activities
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -49,17 +50,12 @@ class SignInActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (backPressedTime + 2000 > System.currentTimeMillis()) {
-            super.onBackPressed()
-            return
-        } else {
-            Toast.makeText(
-                baseContext,
-                "Press back again to exit",
-                Toast.LENGTH_SHORT,
-            ).show()
+        val sharedPref = getSharedPreferences("backPressState", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putBoolean("isFromSignInOrSignUp", true)
+            apply()
         }
-        backPressedTime = System.currentTimeMillis()
+        super.onBackPressed()
     }
 
     private fun signInUser() {
