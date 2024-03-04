@@ -3,6 +3,7 @@ package mnxk.kotlintex.projectm.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -54,6 +55,7 @@ class SignUpActivity : BaseActivity() {
         hideProgressDialog()
         // sign out the user
         FirebaseAuth.getInstance().signOut()
+        Log.d("SignOut", "User signed out")
         // finish the SignUpActivity
         finish()
     }
@@ -92,7 +94,7 @@ class SignUpActivity : BaseActivity() {
         val intent = Intent(this, SignInActivity::class.java)
 
         if (validateForm(name, email, password)) {
-            showProgessDialog(resources.getString(R.string.please_wait))
+            showProgessDialog("Please wait...")
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 

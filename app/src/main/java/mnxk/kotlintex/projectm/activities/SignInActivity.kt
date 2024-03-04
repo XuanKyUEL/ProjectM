@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivitySignInBinding
 import mnxk.kotlintex.projectm.models.User
@@ -15,13 +17,10 @@ class SignInActivity : BaseActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var auth: FirebaseAuth
 
-    private var backPressedTime: Long = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val email = intent.getStringExtra("email")
         binding.etEmailSignIn.setText(email)
 
@@ -30,7 +29,6 @@ class SignInActivity : BaseActivity() {
         binding.btnSignIn.setOnClickListener {
             signInUser()
         }
-
         setupActionBar()
     }
 
@@ -63,22 +61,40 @@ class SignInActivity : BaseActivity() {
         val password = binding.etPasswordSignIn.text.toString().trim { it <= ' ' }
 
         if (validateUserDetails()) {
-            showProgessDialog("Please wait...")
+            showProgessDialog("Signing in...")
             auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "signInWithEmail:success")
-                        val user = auth.currentUser
-                        startActivity(Intent(this, MainActivity::class.java))
-                    } else {
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext,
-                            "Authentication failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        hideProgressDialog()
+                .addOnSuccessListener {
+                    Log.d(TAG, "signInWithEmail:success")
+                    auth.currentUser
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "signInWithEmail:failure", exception)
+                    when (exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            Toast.makeText(
+                                baseContext,
+                                "This email is not registered. Please sign up first.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            Toast.makeText(
+                                baseContext,
+                                "Email or password is incorrect. Please try again.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                baseContext,
+                                "Sign in failed. Please try again later.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     }
+                    hideProgressDialog()
                 }
         }
     }
@@ -101,10 +117,7 @@ class SignInActivity : BaseActivity() {
 
     fun signInSuccess(loggedInUser: User) {
         hideProgressDialog()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra("user", loggedInUser)
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun onDestroy() {

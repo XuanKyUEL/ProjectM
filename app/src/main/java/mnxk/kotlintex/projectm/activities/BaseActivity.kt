@@ -7,6 +7,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.service.controls.ControlsProviderService.TAG
+import android.util.Log
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -19,17 +23,16 @@ import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.databinding.ActivityBaseBinding
 import mnxk.kotlintex.projectm.databinding.DialogCustomProgressBinding
 import java.util.concurrent.Executors.newSingleThreadScheduledExecutor
-import java.util.concurrent.TimeUnit.SECONDS
 
 open class BaseActivity : AppCompatActivity() {
     // A double back press to exit the app
-    private var doubleBackToExitPressedOnce = false
+    var doubleBackToExitPressedOnce = false
 
     lateinit var mProgressDialog: Dialog
     private var binding: ActivityBaseBinding? = null
 
 //    private var dialogBinding = DialogCustomProgressBinding.inflate(layoutInflater)
-    private lateinit var dialogBinding: DialogCustomProgressBinding
+    lateinit var dialogBinding: DialogCustomProgressBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,16 +45,46 @@ open class BaseActivity : AppCompatActivity() {
     protected fun isProgressDialogInitialized() = ::mProgressDialog.isInitialized
 
     fun showProgessDialog(text: String) {
+        Log.d(TAG, "showProgessDialog() called")
+        if (::mProgressDialog.isInitialized && mProgressDialog.isShowing) {
+            dialogBinding.tvMessage.text = text
+            Log.d(TAG, "Dialog is already showing")
+            return
+        }
+
         mProgressDialog = Dialog(this)
         mProgressDialog.setContentView(dialogBinding.root)
         mProgressDialog.setCancelable(false)
         mProgressDialog.setCanceledOnTouchOutside(false)
         dialogBinding.tvMessage.text = text
+
+        // Check if dialogBinding.root already has a parent
+        val parent = dialogBinding.root.parent as? ViewGroup
+        parent?.removeView(dialogBinding.root)
+
         mProgressDialog.show()
+        Log.d(TAG, "Dialog is showing")
     }
 
+//    fun showProgressDialog(text: String) {
+//        if (!::mProgressDialog.isInitialized || !mProgressDialog.isShowing) {
+//            mProgressDialog = Dialog(this)
+//            mProgressDialog.setContentView(dialogBinding.root)
+//            mProgressDialog.setCancelable(false)
+//            mProgressDialog.setCanceledOnTouchOutside(false)
+//            dialogBinding.tvMessage.text = text
+//
+//            // Hiển thị Dialog lên màn hình
+//            mProgressDialog.show()
+//        }
+//    }
+
     fun hideProgressDialog() {
-        mProgressDialog.dismiss()
+        // Kiểm tra nếu mProgressDialog đã được khởi tạo và đang hiển thị
+        if (::mProgressDialog.isInitialized && mProgressDialog.isShowing) {
+            // Đóng Dialog
+            mProgressDialog.dismiss()
+        }
     }
 
     fun getCurrentUserId(): String {
@@ -62,7 +95,7 @@ open class BaseActivity : AppCompatActivity() {
 
     fun doubleBackToExit() {
         if (doubleBackToExitPressedOnce) {
-            finish()
+            super.onBackPressed()
             return
         }
         this.doubleBackToExitPressedOnce = true
@@ -73,10 +106,7 @@ open class BaseActivity : AppCompatActivity() {
         ).show()
 //        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
 //        executor.schedule({ doubleBackToExitPressedOnce = false }, 2000, MILLISECONDS)
-        executor.schedule({ doubleBackToExitPressedOnce = false }, 2, SECONDS)
-        if (isProgressDialogInitialized()) {
-            hideProgressDialog()
-        }
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     fun showErrorSnackBar(message: String) {
