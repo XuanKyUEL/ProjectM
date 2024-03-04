@@ -4,16 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import mnxk.kotlintex.projectm.R
+import mnxk.kotlintex.projectm.adapters.BoardItemsAdapter
 import mnxk.kotlintex.projectm.databinding.ActivityMainBinding
 import mnxk.kotlintex.projectm.databinding.AppBarMainBinding
 import mnxk.kotlintex.projectm.databinding.NavHeaderMainBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
+import mnxk.kotlintex.projectm.models.Board
 import mnxk.kotlintex.projectm.models.User
 import mnxk.kotlintex.projectm.utils.Constants
 
@@ -29,7 +33,7 @@ class MainActivity :
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 val fireStoreClass = fireStoreClass()
-                fireStoreClass.loadUserData(this)
+                fireStoreClass.loadUserData(this, true)
             } else {
                 Log.e("Cancelled", "Cancelled with result code: ${result.resultCode} and intent data: ${result.data}")
             }
@@ -51,6 +55,28 @@ class MainActivity :
             val intent = Intent(this, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, userName)
             startActivity(intent)
+        }
+    }
+
+    fun populateBoardsListToUI(boardsList: ArrayList<Board>) {
+        val reCycleView = binding?.appBarMain?.mainContent?.rvBoardsList ?: return
+        val noBoardsAvailable = binding?.appBarMain?.mainContent?.tvNoBoardsAvailable ?: return
+        hideProgressDialog()
+        if (boardsList.size > 0) {
+            reCycleView.visibility = View.VISIBLE
+            noBoardsAvailable.visibility = View.GONE
+            // layout manager
+            reCycleView.layoutManager = LinearLayoutManager(this)
+            reCycleView.setHasFixedSize(true)
+            // adapter
+            val adapter = BoardItemsAdapter(this, boardsList)
+            binding?.appBarMain?.mainContent?.rvBoardsList?.adapter = adapter
+            // divider
+            val divider = androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager(this).orientation)
+            reCycleView.addItemDecoration(divider)
+        } else {
+            binding?.appBarMain?.mainContent?.tvNoBoardsAvailable?.visibility = android.view.View.VISIBLE
+            binding?.appBarMain?.mainContent?.rvBoardsList?.visibility = android.view.View.GONE
         }
     }
 
@@ -104,7 +130,10 @@ class MainActivity :
         return true
     }
 
-    fun updateNavigationUserDetails(loggedInUser: User) {
+    fun updateNavigationUserDetails(
+        loggedInUser: User,
+        readBoardsList: Boolean,
+    ) {
         Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.name}.")
 
         val viewHeader = binding?.navView?.getHeaderView(0)
@@ -120,7 +149,13 @@ class MainActivity :
                     .centerCrop() // Scale type of the image.
                     .placeholder(R.drawable.ic_user_place_holder) // A default place holder
                     .into(imageViewfinder)
-            } // the view in which the image will be loaded.
+            }
+            if (readBoardsList) {
+                showProgessDialog(resources.getString(R.string.please_wait))
+                val fireStoreClass = fireStoreClass()
+                fireStoreClass.getBoardList(this)
+            }
+            // the view in which the image will be loaded.
         } // the view in which the image will be loaded.
         Log.d("MainActivity", "updateNavigationUserDetails is called with user: ${loggedInUser.name}.")
         headerBinding?.tvUserName?.text = loggedInUser.name
