@@ -36,6 +36,15 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val sharedPref = getSharedPreferences("backPressState", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putBoolean("isFromSignInOrSignUp", true)
+            apply()
+        }
+        super.onBackPressed()
+    }
+
     fun userRegistrationSuccess() {
         Toast.makeText(
             this,
