@@ -52,7 +52,6 @@ class SignUpActivity : BaseActivity() {
             "You have successfully registered",
             Toast.LENGTH_SHORT,
         ).show()
-        hideProgressDialog()
         // sign out the user
         FirebaseAuth.getInstance().signOut()
         Log.d("SignOut", "User signed out")
@@ -94,7 +93,6 @@ class SignUpActivity : BaseActivity() {
         val intent = Intent(this, SignInActivity::class.java)
 
         if (validateForm(name, email, password)) {
-            showProgessDialog("Please wait...")
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 

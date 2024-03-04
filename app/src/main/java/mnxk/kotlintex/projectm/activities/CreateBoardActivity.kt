@@ -71,7 +71,6 @@ class CreateBoardActivity : BaseActivity() {
                 if (imageUri != null) {
                     uploadBoardImage()
                 } else {
-                    showProgessDialog("Creating board...")
                     createBoard()
                 }
             }
@@ -92,7 +91,6 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     private fun uploadBoardImage() {
-        showProgessDialog("Uploading board image...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
@@ -113,7 +111,6 @@ class CreateBoardActivity : BaseActivity() {
                 } else {
                     Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
                     Log.e("Image Upload Error", task.exception?.message, task.exception)
-                    hideProgressDialog()
                 }
             }
         }
@@ -132,7 +129,6 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     fun boardCreatedSuccessfully() {
-        hideProgressDialog()
         Toast.makeText(this, "Board created successfully", Toast.LENGTH_SHORT).show()
         setResult(Activity.RESULT_OK)
         finish()

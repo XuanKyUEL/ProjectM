@@ -31,7 +31,6 @@ class MyProfileActivity : BaseActivity() {
             if (imageUri != null) {
                 uploadUserImage()
             } else {
-                showProgessDialog("Updating profile...")
                 updateUserProfileData()
             }
         }
@@ -126,13 +125,11 @@ class MyProfileActivity : BaseActivity() {
         if (userHashMap.isNotEmpty()) {
             fireStoreClass().updateUserProfileData(this, userHashMap)
         } else {
-            hideProgressDialog()
             finish()
         }
     }
 
     private fun uploadUserImage() {
-        showProgessDialog("Uploading image...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
@@ -153,7 +150,6 @@ class MyProfileActivity : BaseActivity() {
                 } else {
                     Toast.makeText(this@MyProfileActivity, task.exception?.message, Toast.LENGTH_LONG).show()
                     Log.e("Image Upload Error", task.exception?.message, task.exception)
-                    hideProgressDialog()
                 }
             }
         }
@@ -161,7 +157,6 @@ class MyProfileActivity : BaseActivity() {
 
     fun userProfileUpdateSuccess() {
         setResult(RESULT_OK)
-        hideProgressDialog()
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

@@ -79,14 +79,6 @@ open class BaseActivity : AppCompatActivity() {
 //        }
 //    }
 
-    fun hideProgressDialog() {
-        // Kiểm tra nếu mProgressDialog đã được khởi tạo và đang hiển thị
-        if (::mProgressDialog.isInitialized && mProgressDialog.isShowing) {
-            // Đóng Dialog
-            mProgressDialog.dismiss()
-        }
-    }
-
     fun getCurrentUserId(): String {
         return FirebaseAuth.getInstance().currentUser!!.uid
     }
