@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,23 @@ class MainActivity :
             }
         }
 
+    private val backPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
+                    binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+                } else {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - backPressedTime > 2000) {
+                        backPressedTime = currentTime
+                        Toast.makeText(this@MainActivity, "Press back again to exit", Toast.LENGTH_SHORT).show()
+                    } else {
+                        finishAffinity() // Đóng tất cả các activity
+                    }
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -61,6 +79,7 @@ class MainActivity :
         binding3 = binding?.navView
         setupActionBar()
         binding?.navView?.setNavigationItemSelectedListener(this)
+        onBackPressedDispatcher.addCallback(this, backPressedCallback)
         val fireStoreClass = fireStoreClass()
         fireStoreClass.checkLoggedInUser(this)
         binding2?.fabCreateBoard?.setOnClickListener {
@@ -110,25 +129,13 @@ class MainActivity :
         }
     }
 
-    override fun onBackPressed() {
-        if (backPressedTime + 2000 > System.currentTimeMillis()) {
-            super.onBackPressed()
-            return
-        } else {
-            Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
-        }
-        backPressedTime = System.currentTimeMillis()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "signInActivity is destroyed.")
         if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
             binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         } else {
-            if (isProgressDialogInitialized()) {
-                doubleBackToExit()
-            }
+            Toast.makeText(this, "Sign out user successfully", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -174,7 +181,7 @@ class MainActivity :
                     .into(imageViewfinder)
             }
             if (readBoardsList) {
-                showProgessDialog(resources.getString(R.string.please_wait))
+                showProgessDialog("Loading boards...")
                 val fireStoreClass = fireStoreClass()
                 fireStoreClass.getBoardList(this)
             }

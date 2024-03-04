@@ -92,7 +92,7 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     private fun uploadBoardImage() {
-        showProgessDialog("Creating board...")
+        showProgessDialog("Uploading board image...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
