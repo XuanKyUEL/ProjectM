@@ -29,7 +29,6 @@ class fireStoreClass {
                 activity.userRegistrationSuccess()
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
                 activity.showErrorSnackBar(e.message.toString())
             }
     }
@@ -43,7 +42,6 @@ class fireStoreClass {
                 activity.updateNavigationUserDetails(loggedInUser, true)
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
                 Log.e("SignInUser", "Error writing document", e)
             }
     }
@@ -68,7 +66,6 @@ class fireStoreClass {
                 activity.userProfileUpdateSuccess()
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while updating the user details.",
@@ -107,10 +104,8 @@ class fireStoreClass {
             .addOnFailureListener { e ->
                 when (activity) {
                     is SignInActivity -> {
-                        activity.hideProgressDialog()
                     }
                     is MainActivity -> {
-                        activity.hideProgressDialog()
                     }
                 }
                 Log.e("SignInUser", "Error writing document", e)
@@ -128,7 +123,6 @@ class fireStoreClass {
                 activity.boardCreatedSuccessfully()
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
                 Toast.makeText(
                     activity,
@@ -153,7 +147,6 @@ class fireStoreClass {
                 activity.populateBoardsListToUI(boardList)
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error writing document", e)
             }
     }

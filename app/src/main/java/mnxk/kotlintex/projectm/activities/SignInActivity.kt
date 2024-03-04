@@ -61,7 +61,6 @@ class SignInActivity : BaseActivity() {
         val password = binding.etPasswordSignIn.text.toString().trim { it <= ' ' }
 
         if (validateUserDetails()) {
-            showProgessDialog("Signing in...")
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     Log.d(TAG, "signInWithEmail:success")
@@ -94,7 +93,6 @@ class SignInActivity : BaseActivity() {
                             ).show()
                         }
                     }
-                    hideProgressDialog()
                 }
         }
     }
@@ -116,14 +114,10 @@ class SignInActivity : BaseActivity() {
     }
 
     fun signInSuccess(loggedInUser: User) {
-        hideProgressDialog()
         startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isProgressDialogInitialized()) {
-            hideProgressDialog()
-        }
     }
 }

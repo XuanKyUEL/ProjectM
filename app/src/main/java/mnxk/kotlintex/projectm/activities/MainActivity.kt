@@ -92,7 +92,6 @@ class MainActivity :
     fun populateBoardsListToUI(boardsList: ArrayList<Board>) {
         val reCycleView = binding?.appBarMain?.mainContent?.rvBoardsList ?: return
         val noBoardsAvailable = binding?.appBarMain?.mainContent?.tvNoBoardsAvailable ?: return
-        hideProgressDialog()
         if (boardsList.size > 0) {
             reCycleView.visibility = View.VISIBLE
             noBoardsAvailable.visibility = View.GONE
@@ -181,7 +180,6 @@ class MainActivity :
                     .into(imageViewfinder)
             }
             if (readBoardsList) {
-                showProgessDialog("Loading boards...")
                 val fireStoreClass = fireStoreClass()
                 fireStoreClass.getBoardList(this)
             }
