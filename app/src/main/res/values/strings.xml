@@ -40,4 +40,5 @@
     <string name="storage_permission_required">Please allow storage permission</string>
     <string name="no_boards_available">No boards are available!!</string>
     <string name="created_by">Created by: %s</string>
+    <string name="my_profile">My profile</string>
 </resources>

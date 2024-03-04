@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -124,6 +125,9 @@ class MyProfileActivity : BaseActivity() {
         }
         if (userHashMap.isNotEmpty()) {
             fireStoreClass().updateUserProfileData(this, userHashMap)
+        } else {
+            hideProgressDialog()
+            finish()
         }
     }
 
@@ -155,11 +159,11 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    fun userProfileUpdateSuccess(): Void? {
+    fun userProfileUpdateSuccess() {
         setResult(RESULT_OK)
         hideProgressDialog()
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-        finish()
-        return null
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }
