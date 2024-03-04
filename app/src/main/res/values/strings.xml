@@ -38,4 +38,6 @@
     <string name="create">Create</string>
     <string name="storage_permission_denied"> Storage Permission Denied</string>
     <string name="storage_permission_required">Please allow storage permission</string>
+    <string name="no_boards_available">No boards are available!!</string>
+    <string name="created_by">Created by: %s</string>
 </resources>
