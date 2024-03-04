@@ -43,6 +43,10 @@ class SignUpActivity : BaseActivity() {
             Toast.LENGTH_SHORT,
         ).show()
         hideProgressDialog()
+        // sign out the user
+        FirebaseAuth.getInstance().signOut()
+        // finish the SignUpActivity
+        finish()
     }
 
     // Todo: Handle the back button click
