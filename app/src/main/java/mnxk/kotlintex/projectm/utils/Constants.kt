@@ -14,4 +14,5 @@ object Constants {
     const val MOBILE: String = "mobile"
     const val BOARDS = "boards"
     const val ASSIGNED_TO: String = "assignedTo"
+    const val CREATE_BOARD_REQUEST_CODE = 13
 }
