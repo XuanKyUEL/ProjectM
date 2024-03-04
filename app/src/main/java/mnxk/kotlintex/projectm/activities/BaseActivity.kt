@@ -42,8 +42,13 @@ open class BaseActivity : AppCompatActivity() {
             )
         val snackbarView = snackBar.view
         snackbarView.setBackgroundColor(getColor(R.color.snackbar_error_background))
+        // Hide keyboard
+        val inputMethod = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+        val currentFocusedView = currentFocus
+        if (currentFocusedView != null) {
+            inputMethod.hideSoftInputFromWindow(currentFocusedView.windowToken, 0)
+        }
         snackBar.show()
-//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     fun getFileExtension(

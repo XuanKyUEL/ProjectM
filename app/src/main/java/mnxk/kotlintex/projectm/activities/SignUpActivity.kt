@@ -113,6 +113,7 @@ class SignUpActivity : BaseActivity() {
                             Toast.LENGTH_SHORT,
                         ).show()
                     }
+                    loadingDialog.dismissDialog()
                 }
         }
     }
