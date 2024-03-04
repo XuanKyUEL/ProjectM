@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,13 @@ class MainActivity :
         }
 
     private lateinit var userName: String
+    private val boardLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val fireStoreClass = fireStoreClass()
+                fireStoreClass.getBoardList(this)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +62,7 @@ class MainActivity :
         binding2?.fabCreateBoard?.setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, userName)
-            startActivity(intent)
+            boardLauncher.launch(intent)
         }
     }
 

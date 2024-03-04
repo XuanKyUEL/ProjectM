@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -133,7 +134,7 @@ class CreateBoardActivity : BaseActivity() {
     fun boardCreatedSuccessfully() {
         hideProgressDialog()
         Toast.makeText(this, "Board created successfully", Toast.LENGTH_SHORT).show()
-        setResult(RESULT_OK)
+        setResult(Activity.RESULT_OK)
         finish()
     }
 }
