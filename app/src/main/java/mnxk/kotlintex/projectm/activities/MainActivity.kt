@@ -180,8 +180,10 @@ class MainActivity :
                     .into(imageViewfinder)
             }
             if (readBoardsList) {
+                loadingDialog.startLoadingDialog("Loading your boards...")
                 val fireStoreClass = fireStoreClass()
                 fireStoreClass.getBoardList(this)
+                loadingDialog.dismissDialog()
             }
             // the view in which the image will be loaded.
         } // the view in which the image will be loaded.

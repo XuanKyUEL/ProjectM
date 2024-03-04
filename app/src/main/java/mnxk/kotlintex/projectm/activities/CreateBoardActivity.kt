@@ -71,6 +71,7 @@ class CreateBoardActivity : BaseActivity() {
                 if (imageUri != null) {
                     uploadBoardImage()
                 } else {
+                    loadingDialog.startLoadingDialog("Creating board...")
                     createBoard()
                 }
             }
@@ -91,6 +92,7 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     private fun uploadBoardImage() {
+        loadingDialog.startLoadingDialog("Uploading board image...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
@@ -113,6 +115,7 @@ class CreateBoardActivity : BaseActivity() {
                     Log.e("Image Upload Error", task.exception?.message, task.exception)
                 }
             }
+            loadingDialog.dismissDialog()
         }
     }
 
