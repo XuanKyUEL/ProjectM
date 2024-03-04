@@ -10,12 +10,12 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/nav_header_main_background"
+        android:icon="@drawable/projectm_logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_task_image"
+        android:roundIcon="@drawable/projectm_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectM"
-        tools:targetApi="31">
+        tools:targetApi="29">
         <activity
             android:name=".activities.MyProfileActivity"
             android:screenOrientation="fullSensor"
