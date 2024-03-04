@@ -84,4 +84,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    // lottie animation
+    implementation("com.airbnb.android:lottie:6.4.0")
 }

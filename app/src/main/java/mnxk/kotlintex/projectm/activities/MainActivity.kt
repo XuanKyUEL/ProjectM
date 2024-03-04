@@ -181,9 +181,11 @@ class MainActivity :
             }
             if (readBoardsList) {
                 loadingDialog.startLoadingDialog("Loading your boards...")
+                Log.d("Dialog", "Loading your boards...")
                 val fireStoreClass = fireStoreClass()
                 fireStoreClass.getBoardList(this)
                 loadingDialog.dismissDialog()
+                Log.d("Dialog", "Close Loading screen...")
             }
             // the view in which the image will be loaded.
         } // the view in which the image will be loaded.

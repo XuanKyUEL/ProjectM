@@ -69,6 +69,7 @@ class SignInActivity : BaseActivity() {
                     auth.currentUser
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
+                    loadingDialog.dismissDialog()
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "signInWithEmail:failure", exception)
@@ -129,5 +130,6 @@ class SignInActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        loadingDialog.dismissDialog()
     }
 }

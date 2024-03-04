@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="190dp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
+    android:layout_centerInParent="true"
     android:padding="20dp">
 
-    <ProgressBar
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_centerInParent="true"
         android:id="@+id/progressBar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:indeterminateTint="@color/colorAccent"
+        app:lottie_rawRes="@raw/loading_animation_02"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="20dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
 
     <TextView
         android:id="@+id/tv_progress_text"
@@ -21,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="@string/please_wait"
-        android:textColor="@color/secondary_text_color"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
 </RelativeLayout>
