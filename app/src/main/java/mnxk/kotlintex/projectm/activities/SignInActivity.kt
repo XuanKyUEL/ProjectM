@@ -14,6 +14,8 @@ class SignInActivity : BaseActivity() {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var auth: FirebaseAuth
 
+    private var backPressedTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
@@ -44,6 +46,20 @@ class SignInActivity : BaseActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    override fun onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            return
+        } else {
+            Toast.makeText(
+                baseContext,
+                "Press back again to exit",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 
     private fun signInUser() {
@@ -89,19 +105,12 @@ class SignInActivity : BaseActivity() {
 
     fun signInSuccess(loggedInUser: User) {
         hideProgressDialog()
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.putExtra("user", loggedInUser)
+        startActivity(intent)
     }
 
-//    override fun onPause() {
-//        super.onPause()
-//        val sharedPref = getSharedPreferences("user_data_signin", Context.MODE_PRIVATE)
-//        val editor = sharedPref.edit()
-//        editor.putString("email", binding.etEmailSignIn.text.toString())
-//        editor.putString("password", binding.etPasswordSignIn.text.toString())
-//        editor.apply()
-//    }
-    // Fix leak window
     override fun onDestroy() {
         super.onDestroy()
         if (isProgressDialogInitialized()) {

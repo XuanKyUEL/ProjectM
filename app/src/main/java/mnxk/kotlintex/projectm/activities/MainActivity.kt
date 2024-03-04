@@ -1,6 +1,7 @@
 package mnxk.kotlintex.projectm.activities
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -121,6 +122,7 @@ class MainActivity :
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "signInActivity is destroyed.")
         if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
             binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         } else {
