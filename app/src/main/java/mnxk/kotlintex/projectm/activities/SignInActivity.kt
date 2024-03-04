@@ -19,6 +19,9 @@ class SignInActivity : BaseActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val email = intent.getStringExtra("email")
+        binding.etEmailSignIn.setText(email)
+
         auth = FirebaseAuth.getInstance()
 
         binding.btnSignIn.setOnClickListener {
