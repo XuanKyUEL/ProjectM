@@ -1,11 +1,13 @@
 package mnxk.kotlintex.projectm.activities
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,8 @@ class MainActivity :
                 Log.e("Cancelled", "Cancelled with result code: ${result.resultCode} and intent data: ${result.data}")
             }
         }
+
+    private var backPressedTime: Long = 0
 
     private lateinit var userName: String
     private val boardLauncher =
@@ -106,8 +110,19 @@ class MainActivity :
         }
     }
 
+    override fun onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            return
+        } else {
+            Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "signInActivity is destroyed.")
         if (binding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true) {
             binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         } else {
