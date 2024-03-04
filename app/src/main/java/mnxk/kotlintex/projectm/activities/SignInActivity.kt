@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -61,6 +62,7 @@ class SignInActivity : BaseActivity() {
         val password = binding.etPasswordSignIn.text.toString().trim { it <= ' ' }
 
         if (validateUserDetails()) {
+            loadingDialog.startLoadingDialog("Signing in...")
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
                     Log.d(TAG, "signInWithEmail:success")
@@ -85,14 +87,22 @@ class SignInActivity : BaseActivity() {
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }
+                        is FirebaseTooManyRequestsException -> {
+                            Toast.makeText(
+                                baseContext,
+                                "Too many requests. Please try again later.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                         else -> {
                             Toast.makeText(
                                 baseContext,
-                                "Sign in failed. Please try again later.",
+                                "An error occurred. Please try again later.",
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }
                     }
+                    loadingDialog.dismissDialog()
                 }
         }
     }

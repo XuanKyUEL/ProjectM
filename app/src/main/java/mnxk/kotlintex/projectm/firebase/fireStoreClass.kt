@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import mnxk.kotlintex.projectm.activities.CreateBoardActivity
+import mnxk.kotlintex.projectm.activities.LoadingDialog
 import mnxk.kotlintex.projectm.activities.MainActivity
 import mnxk.kotlintex.projectm.activities.MyProfileActivity
 import mnxk.kotlintex.projectm.activities.SignInActivity
@@ -29,7 +30,12 @@ class fireStoreClass {
                 activity.userRegistrationSuccess()
             }
             .addOnFailureListener { e ->
-                activity.showErrorSnackBar(e.message.toString())
+                activity.loadingDialog.dismissDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error writing document",
+                    e,
+                )
             }
     }
 
@@ -66,6 +72,7 @@ class fireStoreClass {
                 activity.userProfileUpdateSuccess()
             }
             .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while updating the user details.",
@@ -104,11 +111,20 @@ class fireStoreClass {
             .addOnFailureListener { e ->
                 when (activity) {
                     is SignInActivity -> {
+                        activity.loadingDialog.dismissDialog()
                     }
                     is MainActivity -> {
+                        activity.loadingDialog.dismissDialog()
                     }
+                    is MyProfileActivity -> {
+                        activity.loadingDialog.dismissDialog()
                 }
-                Log.e("SignInUser", "Error writing document", e)
+            }
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while getting loggedIn user details",
+                    e,
+                )
             }
     }
 
@@ -123,6 +139,7 @@ class fireStoreClass {
                 activity.boardCreatedSuccessfully()
             }
             .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
                 Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
                 Toast.makeText(
                     activity,

@@ -31,31 +31,12 @@ class MyProfileActivity : BaseActivity() {
             if (imageUri != null) {
                 uploadUserImage()
             } else {
+                loadingDialog.startLoadingDialog("Updating your profile...")
                 updateUserProfileData()
             }
         }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == PICK_IMAGE_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                if (data != null) {
-//                    try {
-//                        val selectedImageUri = data.data!!
-//                        Glide
-//                            .with(this)
-//                            .load(selectedImageUri)
-//                            .centerCrop()
-//                            .placeholder(R.drawable.ic_user_place_holder)
-//                            .into(binding.civProfileImage)
-//                    } catch (e: Exception) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            }
-//        }
-//    }
     override fun onImagePicked() {
         try {
             Glide
@@ -130,6 +111,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     private fun uploadUserImage() {
+        loadingDialog.startLoadingDialog("Uploading your profile picture...")
         if (imageUri != null) {
             val sRef: StorageReference =
                 FirebaseStorage.getInstance().reference.child(
@@ -151,11 +133,13 @@ class MyProfileActivity : BaseActivity() {
                     Toast.makeText(this@MyProfileActivity, task.exception?.message, Toast.LENGTH_LONG).show()
                     Log.e("Image Upload Error", task.exception?.message, task.exception)
                 }
+                loadingDialog.dismissDialog()
             }
         }
     }
 
     fun userProfileUpdateSuccess() {
+        loadingDialog.dismissDialog()
         setResult(RESULT_OK)
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, MainActivity::class.java)
