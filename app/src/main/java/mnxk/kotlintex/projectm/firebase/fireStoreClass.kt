@@ -7,11 +7,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import mnxk.kotlintex.projectm.activities.CreateBoardActivity
-import mnxk.kotlintex.projectm.activities.LoadingDialog
 import mnxk.kotlintex.projectm.activities.MainActivity
 import mnxk.kotlintex.projectm.activities.MyProfileActivity
 import mnxk.kotlintex.projectm.activities.SignInActivity
 import mnxk.kotlintex.projectm.activities.SignUpActivity
+import mnxk.kotlintex.projectm.activities.TaskListActivity
 import mnxk.kotlintex.projectm.models.Board
 import mnxk.kotlintex.projectm.models.User
 import mnxk.kotlintex.projectm.utils.Constants
@@ -118,8 +118,8 @@ class fireStoreClass {
                     }
                     is MyProfileActivity -> {
                         activity.loadingDialog.dismissDialog()
+                    }
                 }
-            }
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while getting loggedIn user details",
@@ -164,6 +164,25 @@ class fireStoreClass {
                 activity.populateBoardsListToUI(boardList)
             }
             .addOnFailureListener { e ->
+                Log.e(activity.javaClass.simpleName, "Error writing document", e)
+            }
+    }
+
+    fun getBoardDetails(
+        activity: TaskListActivity,
+        boardDocumentId: String,
+    ) {
+        mFireStore.collection(Constants.BOARDS)
+            .document(boardDocumentId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.toString())
+                val board = document.toObject(Board::class.java)!!
+                board.documentId = document.id
+                activity.boardDetails(board)
+            }
+            .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
                 Log.e(activity.javaClass.simpleName, "Error writing document", e)
             }
     }

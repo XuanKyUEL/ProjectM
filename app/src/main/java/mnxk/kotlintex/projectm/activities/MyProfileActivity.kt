@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -17,6 +18,13 @@ class MyProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityMyProfileBinding
     private var profileImageURL: String = ""
     private lateinit var user: User
+
+    private val onBackPressed =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

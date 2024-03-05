@@ -59,6 +59,10 @@ open class BoardItemsAdapter(
         }
     }
 
+    fun setOnClickListener(onClickListener: BoardItemsAdapter.OnClickListener) {
+        this.onClickListener = onClickListener
+    }
+
     interface OnClickListener {
         fun onClick(
             position: Int,
