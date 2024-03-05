@@ -101,12 +101,26 @@ class MainActivity :
             // adapter
             val adapter = BoardItemsAdapter(this, boardsList)
             binding?.appBarMain?.mainContent?.rvBoardsList?.adapter = adapter
+            // set on click listener
+            adapter.setOnClickListener(
+                object : BoardItemsAdapter.OnClickListener {
+                    override fun onClick(
+                        position: Int,
+                        model: Board,
+                    ) {
+                        val intent = Intent(this@MainActivity, TaskListActivity::class.java)
+                        intent.putExtra(Constants.DOCUMENT_ID, model.documentId)
+                        startActivity(intent)
+                    }
+                },
+            )
+
             // divider
             val divider = androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager(this).orientation)
             reCycleView.addItemDecoration(divider)
         } else {
-            binding?.appBarMain?.mainContent?.tvNoBoardsAvailable?.visibility = android.view.View.VISIBLE
-            binding?.appBarMain?.mainContent?.rvBoardsList?.visibility = android.view.View.GONE
+            binding?.appBarMain?.mainContent?.tvNoBoardsAvailable?.visibility = View.VISIBLE
+            binding?.appBarMain?.mainContent?.rvBoardsList?.visibility = View.GONE
         }
     }
 
