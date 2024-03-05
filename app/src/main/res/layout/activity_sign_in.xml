@@ -87,7 +87,11 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
+                    android:paddingBottom="8dp"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/colorPrimary"
+                    app:passwordToggleDrawable="@drawable/password_togle">
+
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_password_sign_in"
