@@ -2,11 +2,13 @@ package mnxk.kotlintex.projectm.activities
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import com.google.firebase.firestore.DocumentSnapshot
+import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
+import mnxk.kotlintex.projectm.adapters.TaskListItemsAdapter
 import mnxk.kotlintex.projectm.databinding.ActivityTaskListBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.Board
+import mnxk.kotlintex.projectm.models.Task
 import mnxk.kotlintex.projectm.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -48,9 +50,20 @@ class TaskListActivity : BaseActivity() {
         return true
     }
 
-    fun boardDetails(board: Board): DocumentSnapshot? {
+    fun boardDetails(board: Board) {
         loadingDialog.dismissDialog()
         setUpActionBar(board)
-        return null
+        val addTaskList = Task(resources.getString(R.string.add_list))
+        board.taskList.add(addTaskList)
+
+        binding.rvTaskList.layoutManager =
+            LinearLayoutManager(
+                this,
+                LinearLayoutManager.HORIZONTAL,
+                false,
+            )
+        binding.rvTaskList.setHasFixedSize(true)
+        val adapter = TaskListItemsAdapter(this, board.taskList)
+        binding.rvTaskList.adapter = adapter
     }
 }
