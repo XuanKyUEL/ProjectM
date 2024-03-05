@@ -91,9 +91,10 @@ class SignUpActivity : BaseActivity() {
         val name: String = binding.etNameSignUp.text.toString().trim { it <= ' ' }
         val email: String = binding.etEmailSignUp.text.toString().trim { it <= ' ' }
         val password: String = binding.etPasswordSignUp.text.toString().trim { it <= ' ' }
+        val re_enter_password: String = binding.checkedPwd.text.toString().trim { it <= ' ' }
         val intent = Intent(this, SignInActivity::class.java)
 
-        if (validateForm(name, email, password)) {
+        if (validateForm(name, email, password, re_enter_password)) {
             // Show the progress dialog
             loadingDialog.startLoadingDialog("Registering...")
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -122,6 +123,7 @@ class SignUpActivity : BaseActivity() {
         name: String,
         email: String,
         password: String,
+        re_enter_password: String,
     ): Boolean {
         return when {
             name.isEmpty() -> {
@@ -134,6 +136,10 @@ class SignUpActivity : BaseActivity() {
             }
             password.isEmpty() -> {
                 showErrorSnackBar("Please enter your password")
+                false
+            }
+            password != re_enter_password -> {
+                showErrorSnackBar("Passwords do not match")
                 false
             }
             else -> {
