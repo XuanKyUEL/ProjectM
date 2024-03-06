@@ -13,6 +13,7 @@ import mnxk.kotlintex.projectm.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
+    private lateinit var boardDetails: Board
 
     private val onBackPressed =
         object : OnBackPressedCallback(true) {
@@ -33,14 +34,14 @@ class TaskListActivity : BaseActivity() {
         fireStoreClass().getBoardDetails(this, boardDocumentId)
     }
 
-    private fun setUpActionBar(board: Board) {
+    private fun setUpActionBar() {
         setSupportActionBar(binding.toolbarTaskListActivity)
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.run {
                 setDisplayHomeAsUpEnabled(true)
                 setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-                title = board.name
+                title = boardDetails.name
             }
         }
     }
@@ -51,11 +52,12 @@ class TaskListActivity : BaseActivity() {
     }
 
     fun boardDetails(board: Board) {
+        boardDetails = board
         loadingDialog.dismissDialog()
-        setUpActionBar(board)
+        setUpActionBar()
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
-
+        val adapter = TaskListItemsAdapter(this, board.taskList)
         binding.rvTaskList.layoutManager =
             LinearLayoutManager(
                 this,
@@ -63,7 +65,20 @@ class TaskListActivity : BaseActivity() {
                 false,
             )
         binding.rvTaskList.setHasFixedSize(true)
-        val adapter = TaskListItemsAdapter(this, board.taskList)
         binding.rvTaskList.adapter = adapter
+    }
+
+    fun addUpdateTaskListSuccess() {
+        loadingDialog.dismissDialog()
+        loadingDialog.startLoadingDialog("Loading board's tasks...")
+        fireStoreClass().getBoardDetails(this, boardDetails.documentId)
+    }
+
+    fun createTaskList(taskListName: String) {
+        val task = Task(taskListName, fireStoreClass().getCurrentUserId())
+        boardDetails.taskList.add(0, task)
+        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        loadingDialog.startLoadingDialog("Creating task list...")
+        fireStoreClass().addUpdateTaskList(this, boardDetails)
     }
 }

@@ -1,6 +1,7 @@
 package mnxk.kotlintex.projectm.utils
 
 object Constants {
+    val TASK_LIST: String = "taskList"
     val DOCUMENT_ID: String = "documentId"
     const val BOARD_IMAGE: String = "board_image"
     const val USERS: String = "users"
