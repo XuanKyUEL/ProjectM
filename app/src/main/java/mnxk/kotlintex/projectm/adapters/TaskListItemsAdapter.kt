@@ -1,5 +1,6 @@
 package mnxk.kotlintex.projectm.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.activities.TaskListActivity
 import mnxk.kotlintex.projectm.databinding.ItemTaskBinding
 import mnxk.kotlintex.projectm.models.Task
@@ -75,17 +77,81 @@ open class TaskListItemsAdapter(
             }
             holder.binding.ibDoneListName.setOnClickListener {
                 Log.d("TAG_ibDoneListName_enabled", holder.binding.ibDoneListName.isEnabled.toString())
-                Log.d("TAG_ibDoneListName", "Clicked")
                 val listName = holder.binding.etTaskListName.text.toString()
                 if (listName.isNotEmpty()) {
                     if (context is TaskListActivity) {
                         context.createTaskList(listName)
+                        Log.d("TAG_ibDoneListName", "Clicked")
                     }
+                } else {
+                    Toast.makeText(context, "Please enter list name.", Toast.LENGTH_SHORT).show()
+                    Log.e("TAG_ibDoneListName", "List name is empty.")
+                }
+            }
+            holder.binding.ibEditListName.setOnClickListener {
+                holder.binding.etEditTaskListName.setText(model.title)
+                holder.binding.llTitleView.visibility = View.GONE
+                holder.binding.cvEditTaskListName.visibility = View.VISIBLE
+            }
+            holder.binding.ibCloseEditableView.setOnClickListener {
+                holder.binding.llTitleView.visibility = View.VISIBLE
+                holder.binding.cvEditTaskListName.visibility = View.GONE
+            }
+            holder.binding.ibDoneEditListName.setOnClickListener {
+                val listName = holder.binding.etEditTaskListName.text.toString()
+                if (listName.isNotEmpty() && listName != model.title) {
+                    if (context is TaskListActivity) {
+                        context.updateTaskList(position, listName, model)
+                    }
+                } else if (listName == model.title) {
+                    holder.binding.llTitleView.visibility = View.VISIBLE
+                    holder.binding.cvEditTaskListName.visibility = View.GONE
                 } else {
                     Toast.makeText(context, "Please enter list name.", Toast.LENGTH_SHORT).show()
                 }
             }
+            holder.binding.ibDeleteList.setOnClickListener {
+                alertDialogForDeleteList(position)
+            }
+            holder.binding.tvAddCard.setOnClickListener {
+                holder.binding.tvAddCard.visibility = View.GONE
+                holder.binding.cvAddCard.visibility = View.VISIBLE
+            }
+            holder.binding.ibCloseCardName.setOnClickListener {
+                holder.binding.tvAddCard.visibility = View.VISIBLE
+                holder.binding.cvAddCard.visibility = View.GONE
+            }
+            holder.binding.ibDoneCardName.setOnClickListener {
+                val cardName = holder.binding.etCardName.text.toString()
+                if (cardName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
+                        context.addCardToTaskList(position, cardName)
+                    }
+                } else {
+                    Toast.makeText(context, "Please enter card name.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+    }
+
+    // Alert the user if they are about to delete a task list
+    private fun alertDialogForDeleteList(position: Int) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Alert")
+        builder.setMessage("Are you sure you want to delete this task list?")
+        builder.setIcon(R.drawable.delete_icon_fordialog)
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+            dialogInterface.dismiss()
+            if (context is TaskListActivity) {
+                context.deleteTaskList(position)
+            }
+        }
+        builder.setNegativeButton("No") { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
     // make viewholder only occupy 70% of the screen
