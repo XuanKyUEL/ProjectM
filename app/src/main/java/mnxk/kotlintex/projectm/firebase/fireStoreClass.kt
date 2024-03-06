@@ -186,4 +186,27 @@ class fireStoreClass {
                 Log.e(activity.javaClass.simpleName, "Error writing document", e)
             }
     }
+
+    fun addUpdateTaskList(
+        activity: TaskListActivity,
+        board: Board,
+    ) {
+        val taskListHashMap = HashMap<String, Any>()
+        taskListHashMap[Constants.TASK_LIST] = board.taskList
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)
+            .update(taskListHashMap)
+            .addOnSuccessListener {
+                activity.addUpdateTaskListSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
+                Toast.makeText(
+                    activity,
+                    "Error when creating a board.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+    }
 }
