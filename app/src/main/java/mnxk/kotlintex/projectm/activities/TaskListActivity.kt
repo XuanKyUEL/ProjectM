@@ -8,6 +8,7 @@ import mnxk.kotlintex.projectm.adapters.TaskListItemsAdapter
 import mnxk.kotlintex.projectm.databinding.ActivityTaskListBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.Board
+import mnxk.kotlintex.projectm.models.Card
 import mnxk.kotlintex.projectm.models.Task
 import mnxk.kotlintex.projectm.utils.Constants
 
@@ -79,6 +80,46 @@ class TaskListActivity : BaseActivity() {
         boardDetails.taskList.add(0, task)
         boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
         loadingDialog.startLoadingDialog("Creating task list...")
+        fireStoreClass().addUpdateTaskList(this, boardDetails)
+    }
+
+    fun updateTaskList(
+        position: Int,
+        listName: String,
+        model: Task,
+    ) {
+        val task = Task(listName, model.createdBy)
+        boardDetails.taskList[position] = task
+        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        loadingDialog.startLoadingDialog("Updating task list...")
+        fireStoreClass().addUpdateTaskList(this, boardDetails)
+    }
+
+    fun deleteTaskList(position: Int) {
+        boardDetails.taskList.removeAt(position)
+        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        loadingDialog.startLoadingDialog("Deleting task list...")
+        fireStoreClass().addUpdateTaskList(this, boardDetails)
+    }
+
+    fun addCardToTaskList(
+        taskListPosition: Int,
+        cardName: String,
+    ) {
+        boardDetails.taskList.removeAt(boardDetails.taskList.size - 1)
+        val cardAssignedUsersList: ArrayList<String> = ArrayList()
+        cardAssignedUsersList.add(fireStoreClass().getCurrentUserId())
+        val card = Card(cardName, fireStoreClass().getCurrentUserId(), cardAssignedUsersList)
+        val cardList = boardDetails.taskList[taskListPosition].cards
+        cardList.add(card)
+        val task =
+            Task(
+                boardDetails.taskList[taskListPosition].title,
+                boardDetails.taskList[taskListPosition].createdBy,
+                cardList,
+            )
+        boardDetails.taskList[taskListPosition] = task
+        loadingDialog.startLoadingDialog("Adding card to task list...")
         fireStoreClass().addUpdateTaskList(this, boardDetails)
     }
 }
