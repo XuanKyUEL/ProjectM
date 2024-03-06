@@ -131,6 +131,10 @@ open class TaskListItemsAdapter(
                     Toast.makeText(context, "Please enter card name.", Toast.LENGTH_SHORT).show()
                 }
             }
+            holder.binding.rvCardList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+            holder.binding.rvCardList.setHasFixedSize(true)
+            val adapter = CardListItemsAdapter(context, model.cards)
+            holder.binding.rvCardList.adapter = adapter
         }
     }
 
