@@ -1,6 +1,9 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
@@ -33,6 +36,20 @@ class TaskListActivity : BaseActivity() {
         }
         loadingDialog.startLoadingDialog("Loading board's tasks...")
         fireStoreClass().getBoardDetails(this, boardDocumentId)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_members, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_members -> {
+                startActivity(Intent(this, MembersActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setUpActionBar() {
