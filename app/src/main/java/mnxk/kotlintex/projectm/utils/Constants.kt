@@ -1,5 +1,10 @@
 package mnxk.kotlintex.projectm.utils
 
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import java.io.Serializable
+
 object Constants {
     val TASK_LIST: String = "taskList"
     val DOCUMENT_ID: String = "documentId"
@@ -18,4 +23,37 @@ object Constants {
     const val ASSIGNED_TO: String = "assignedTo"
     const val CREATE_BOARD_REQUEST_CODE = 13
     const val BOARD_DETAIL: String = "board_detail"
+    const val ID: String = "id"
+}
+
+@Suppress("DEPRECATION")
+object IntentUtils {
+    inline fun <reified T : java.io.Serializable> Bundle.serializable(key: String): T? =
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getSerializable(key, T::class.java)
+            else ->
+                @Suppress("DEPRECATION")
+                getSerializable(key)
+                    as? T
+        }
+
+    inline fun <reified T : Serializable> Intent.serializable(key: String): T? =
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getSerializableExtra(key, T::class.java)
+            else ->
+                @Suppress("DEPRECATION")
+                getSerializableExtra(key)
+                    as? T
+        }
+
+    inline fun <reified Board> getParcelableExtra(
+        intent: Intent?,
+        s: String,
+    ): Board? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getParcelableExtra(s, Board::class.java)
+        } else {
+            intent?.getParcelableExtra(s)
+        }
+    }
 }

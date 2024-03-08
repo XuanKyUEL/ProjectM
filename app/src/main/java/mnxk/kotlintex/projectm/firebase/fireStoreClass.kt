@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import mnxk.kotlintex.projectm.activities.CreateBoardActivity
 import mnxk.kotlintex.projectm.activities.MainActivity
+import mnxk.kotlintex.projectm.activities.MembersActivity
 import mnxk.kotlintex.projectm.activities.MyProfileActivity
 import mnxk.kotlintex.projectm.activities.SignInActivity
 import mnxk.kotlintex.projectm.activities.SignUpActivity
@@ -207,6 +208,29 @@ class fireStoreClass {
                     "Error when creating a board.",
                     Toast.LENGTH_SHORT,
                 ).show()
+            }
+    }
+
+    fun getAssignMemberListDetials(
+        activity: MembersActivity,
+        assignedTo: ArrayList<String>,
+    ) {
+        mFireStore.collection(Constants.USERS)
+            .whereIn(Constants.ID, assignedTo)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                Log.i(activity.javaClass.simpleName, document.documents.toString())
+                val usersList: ArrayList<User> = ArrayList()
+                for (i in document.documents) {
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)
+                }
+                activity.setupMembersList(usersList)
+            }
+            .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
+                Log.e(activity.javaClass.simpleName, "Error writing document", e)
             }
     }
 }
