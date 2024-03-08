@@ -2,14 +2,19 @@ package mnxk.kotlintex.projectm.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
+import mnxk.kotlintex.projectm.adapters.MemberListItemsAdapter
 import mnxk.kotlintex.projectm.databinding.ActivityMembersBinding
+import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.Board
+import mnxk.kotlintex.projectm.models.User
+import mnxk.kotlintex.projectm.utils.Constants
+import mnxk.kotlintex.projectm.utils.IntentUtils
 
-class MembersActivity : AppCompatActivity() {
+class MembersActivity : BaseActivity() {
     private lateinit var boardDetails: Board
     private lateinit var binding: ActivityMembersBinding
 
@@ -23,10 +28,20 @@ class MembersActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if (intent.hasExtra("boardDetail")) {
-            boardDetails = intent.getParcelableExtra("boardDetail")!!
+        if (intent.hasExtra(Constants.BOARD_DETAIL)) {
+            boardDetails = IntentUtils.getParcelableExtra<Board>(intent, Constants.BOARD_DETAIL)!!
+            loadingDialog.startLoadingDialog("Loading members...")
+            fireStoreClass().getAssignMemberListDetials(this, boardDetails.assignedTo)
         }
         setupActionBar()
+    }
+
+    fun setupMembersList(list: ArrayList<User>) {
+        loadingDialog.dismissDialog()
+        binding.rvMembersList.layoutManager = LinearLayoutManager(this)
+        binding.rvMembersList.setHasFixedSize(true)
+        val adapter = MemberListItemsAdapter(this, list)
+        binding.rvMembersList.adapter = adapter
     }
 
     private fun setupActionBar() {
