@@ -233,4 +233,50 @@ class fireStoreClass {
                 Log.e(activity.javaClass.simpleName, "Error writing document", e)
             }
     }
+
+    fun getMemberDetails(
+        activity: MembersActivity,
+        email: String,
+    ) {
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL, email)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.documents.size > 0) {
+                    val user = document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+                } else {
+                    activity.loadingDialog.dismissDialog()
+                    activity.showErrorSnackBar("Member doesn't exist. Please enter the correct email address.")
+                }
+            }
+            .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
+                Log.e(activity.javaClass.simpleName, "Error writing document", e)
+            }
+    }
+
+    fun assignMemberToBoard(
+        activity: MembersActivity,
+        board: Board,
+        user: User,
+    ) {
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)
+            .update(assignedToHashMap)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }
+            .addOnFailureListener { e ->
+                activity.loadingDialog.dismissDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
+                Toast.makeText(
+                    activity,
+                    "Error when creating a board.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+    }
 }
