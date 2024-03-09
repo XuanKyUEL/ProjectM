@@ -17,10 +17,13 @@
         android:theme="@style/Theme.ProjectM"
         tools:targetApi="29">
         <activity
-            android:screenOrientation="unspecified"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".activities.MembersActivity"
+            android:name=".activities.CardDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.MembersActivity"
+            android:exported="false"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activities.TaskListActivity"
             android:exported="false"

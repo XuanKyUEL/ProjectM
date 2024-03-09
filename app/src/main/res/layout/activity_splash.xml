@@ -9,8 +9,8 @@
         android:id="@+id/splash_screen_logo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/splash_screen_gradient_bg"
-        android:contentDescription="@string/appname" />
+        android:contentDescription="@string/appname"
+        android:src="@drawable/splash_screen_gradient_bg" />
 
     <TextView
         android:id="@+id/splash_screen_title"

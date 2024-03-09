@@ -1,7 +1,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
+        android:angle="0"
+        android:endColor="#3F51B5"
         android:startColor="#B4DCE8"
-    android:endColor="#3F51B5"
-    android:type="linear"
-    android:angle="0"/> <!-- Góc của gradient -->
+        android:type="linear" /> <!-- Góc của gradient -->
 </shape>
