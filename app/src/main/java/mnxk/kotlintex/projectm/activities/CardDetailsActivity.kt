@@ -1,7 +1,6 @@
 package mnxk.kotlintex.projectm.activities
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import mnxk.kotlintex.projectm.databinding.ActivityCardDetailsBinding
 
@@ -10,7 +9,6 @@ class CardDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityCardDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
