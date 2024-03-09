@@ -54,7 +54,10 @@ open class TaskListItemsAdapter(
     ) {
         val model = list[position]
         if (holder is MyViewHolder) {
-            Log.d("TAG_ibCloseListName_enabled", holder.binding.ibCloseListName.isEnabled.toString())
+            Log.d(
+                "TAG_ibCloseListName_enabled",
+                holder.binding.ibCloseListName.isEnabled.toString(),
+            )
             Log.d("TAG_ibDoneListName_enabled", holder.binding.ibDoneListName.isEnabled.toString())
             if (position == list.size - 1) {
                 holder.binding.tvAddTaskList.visibility = View.VISIBLE
@@ -70,13 +73,19 @@ open class TaskListItemsAdapter(
                 Log.e("TAG_tvAddTaskList", "Clicked")
             }
             holder.binding.ibCloseListName.setOnClickListener {
-                Log.d("TAG_ibCloseListName_enabled", holder.binding.ibCloseListName.isEnabled.toString())
+                Log.d(
+                    "TAG_ibCloseListName_enabled",
+                    holder.binding.ibCloseListName.isEnabled.toString(),
+                )
                 Log.i("TAG_ibCloseListName", "Clicked")
                 holder.binding.tvAddTaskList.visibility = View.VISIBLE
                 holder.binding.cvAddTaskListName.visibility = View.GONE
             }
             holder.binding.ibDoneListName.setOnClickListener {
-                Log.d("TAG_ibDoneListName_enabled", holder.binding.ibDoneListName.isEnabled.toString())
+                Log.d(
+                    "TAG_ibDoneListName_enabled",
+                    holder.binding.ibDoneListName.isEnabled.toString(),
+                )
                 val listName = holder.binding.etTaskListName.text.toString()
                 if (listName.isNotEmpty()) {
                     if (context is TaskListActivity) {
@@ -131,7 +140,8 @@ open class TaskListItemsAdapter(
                     Toast.makeText(context, "Please enter card name.", Toast.LENGTH_SHORT).show()
                 }
             }
-            holder.binding.rvCardList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+            holder.binding.rvCardList.layoutManager =
+                androidx.recyclerview.widget.LinearLayoutManager(context)
             holder.binding.rvCardList.setHasFixedSize(true)
             val adapter = CardListItemsAdapter(context, model.cards)
             holder.binding.rvCardList.adapter = adapter

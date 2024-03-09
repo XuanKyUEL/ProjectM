@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/sign_in_up_bg"
+    android:orientation="vertical"
     tools:context=".activities.SignInActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -88,9 +88,9 @@
                     android:layout_marginEnd="16dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
+                    app:passwordToggleDrawable="@drawable/password_togle"
                     app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/colorPrimary"
-                    app:passwordToggleDrawable="@drawable/password_togle">
+                    app:passwordToggleTint="@color/colorPrimary">
 
 
                     <androidx.appcompat.widget.AppCompatEditText

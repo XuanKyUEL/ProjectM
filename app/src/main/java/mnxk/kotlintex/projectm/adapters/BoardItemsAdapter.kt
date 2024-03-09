@@ -13,7 +13,8 @@ open class BoardItemsAdapter(
     private val context: Context,
     private val list: ArrayList<Board>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private class MyViewHolder(val binding: ItemBoardBinding) : RecyclerView.ViewHolder(binding.root)
+    private class MyViewHolder(val binding: ItemBoardBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     private var onClickListener: OnClickListener? = null
 
@@ -49,7 +50,8 @@ open class BoardItemsAdapter(
                 .placeholder(R.drawable.ic_board_place_holder)
                 .into(holder.binding.civBoardImage)
             holder.binding.tvBoardName.text = model.name
-            holder.binding.tvCreatedBy.text = context.getString(R.string.created_by, model.createdBy)
+            holder.binding.tvCreatedBy.text =
+                context.getString(R.string.created_by, model.createdBy)
 
             holder.itemView.setOnClickListener {
                 if (onClickListener != null) {
@@ -59,7 +61,7 @@ open class BoardItemsAdapter(
         }
     }
 
-    fun setOnClickListener(onClickListener: BoardItemsAdapter.OnClickListener) {
+    fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
 
