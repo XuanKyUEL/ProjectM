@@ -104,9 +104,11 @@ class MyProfileActivity : BaseActivity() {
         if (name != user.name) {
             userHashMap[Constants.NAME] = name
         }
-        val mobileNumber: Long = binding.etMobileNumber.text.toString().toLong()
-        if (mobileNumber != user.mobile) {
-            userHashMap[Constants.MOBILE] = mobileNumber
+        val mobileNumber: String = binding.etMobileNumber.text.toString()
+        if (mobileNumber.isNotEmpty()) {
+            userHashMap[Constants.MOBILE] = mobileNumber.toLong()
+        } else {
+            userHashMap[Constants.MOBILE] = 0
         }
         if (profileImageURL.isNotEmpty()) {
             userHashMap[Constants.IMAGE] = profileImageURL
