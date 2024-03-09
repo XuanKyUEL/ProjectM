@@ -3,6 +3,7 @@ package mnxk.kotlintex.projectm.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
@@ -26,6 +27,8 @@ class TaskListActivity : BaseActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 loadingDialog.startLoadingDialog("Loading board's tasks...")
                 fireStoreClass().getBoardDetails(this, boardDetails.documentId)
+            } else {
+                Log.e("Cancelled", "Cancelled with result code: ${result.resultCode} and intent data: ${result.data}")
             }
         }
 
