@@ -1,10 +1,12 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.adapters.TaskListItemsAdapter
@@ -19,23 +21,32 @@ class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
     private lateinit var boardDetails: Board
 
+    private val startForMemberResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                loadingDialog.startLoadingDialog("Loading board's tasks...")
+                fireStoreClass().getBoardDetails(this, boardDetails.documentId)
+            }
+        }
+
     private val onBackPressed =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finish()
             }
         }
+    private var boardDocumentId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var boardDocumentId = ""
         if (intent.hasExtra("documentId")) {
             boardDocumentId = intent.getStringExtra(Constants.DOCUMENT_ID)!!
         }
         loadingDialog.startLoadingDialog("Loading board's tasks...")
         fireStoreClass().getBoardDetails(this, boardDocumentId)
+        onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,7 +59,8 @@ class TaskListActivity : BaseActivity() {
             R.id.action_members -> {
                 val intent = Intent(this, MembersActivity::class.java)
                 intent.putExtra(Constants.BOARD_DETAIL, boardDetails)
-                startActivity(intent)
+                startForMemberResult.launch(intent)
+                return true
             }
         }
         return super.onOptionsItemSelected(item)

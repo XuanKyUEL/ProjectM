@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,6 +24,17 @@ class MembersActivity : BaseActivity() {
     private lateinit var binding: ActivityMembersBinding
     private lateinit var searchdialogBinding: DialogSearchMemberBinding
     private lateinit var assignedMembersDetailList: ArrayList<User>
+    private var changedMake: Boolean = false
+
+    private val onBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (changedMake) {
+                    setResult(RESULT_OK)
+                }
+                finish()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +52,7 @@ class MembersActivity : BaseActivity() {
             fireStoreClass().getAssignMemberListDetials(this, boardDetails.assignedTo)
         }
         setupActionBar()
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     fun setupMembersList(list: ArrayList<User>) {
@@ -60,6 +73,9 @@ class MembersActivity : BaseActivity() {
         assignedMembersDetailList.add(user)
         loadingDialog.dismissDialog()
         setupMembersList(assignedMembersDetailList)
+        changedMake = true
+        val intent = intent
+        setResult(RESULT_OK, intent)
     }
 
     private fun setupActionBar() {
