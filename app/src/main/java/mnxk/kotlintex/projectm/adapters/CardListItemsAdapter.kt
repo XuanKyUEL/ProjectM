@@ -31,7 +31,7 @@ open class CardListItemsAdapter(
     }
 
     interface OnClickListener {
-        fun onClick(cardPosition: Int)
+        fun onClick(position: Int)
     }
 
     fun setOnClickListener(onClickListener: OnClickListener) {
@@ -45,6 +45,11 @@ open class CardListItemsAdapter(
         val model = list[position]
         if (holder is MyViewHolder) {
             holder.binding.tvCardName.text = model.name
+            holder.itemView.setOnClickListener {
+                if (onClickListener != null) {
+                    onClickListener!!.onClick(holder.absoluteAdapterPosition)
+                }
+            }
         }
     }
 }

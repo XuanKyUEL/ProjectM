@@ -32,6 +32,11 @@ class TaskListActivity : BaseActivity() {
             }
         }
 
+    fun cardDetails(card: Card) {
+        val intent = Intent(this, CardDetailsActivity::class.java)
+        startActivity(intent)
+    }
+
     private val onBackPressed =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

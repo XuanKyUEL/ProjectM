@@ -10,6 +10,7 @@ data class Board(
     val assignedTo: ArrayList<String> = ArrayList(),
     var documentId: String = "",
     var taskList: ArrayList<Task> = ArrayList(),
+    var stability: Int = 0,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

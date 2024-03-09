@@ -108,9 +108,10 @@ open class TaskListItemsAdapter(
             }
             holder.binding.ibDoneEditListName.setOnClickListener {
                 val listName = holder.binding.etEditTaskListName.text.toString()
+                val currentPosition = holder.absoluteAdapterPosition
                 if (listName.isNotEmpty() && listName != model.title) {
                     if (context is TaskListActivity) {
-                        context.updateTaskList(position, listName, model)
+                        context.updateTaskList(currentPosition, listName, model)
                     }
                 } else if (listName == model.title) {
                     holder.binding.llTitleView.visibility = View.VISIBLE
@@ -145,6 +146,16 @@ open class TaskListItemsAdapter(
             holder.binding.rvCardList.setHasFixedSize(true)
             val adapter = CardListItemsAdapter(context, model.cards)
             holder.binding.rvCardList.adapter = adapter
+            adapter.setOnClickListener(
+                object : CardListItemsAdapter.OnClickListener {
+                    override fun onClick(cardPosition: Int) {
+                        if (context is TaskListActivity) {
+                            val card = model.cards[cardPosition]
+                            context.cardDetails(card)
+                        }
+                    }
+                },
+            )
         }
     }
 
