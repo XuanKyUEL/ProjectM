@@ -88,7 +88,7 @@ class MembersActivity : BaseActivity() {
                 title = resources.getString(R.string.members)
             }
         }
-        binding.toolbarMembersActivity.setNavigationOnClickListener { onBackPressed() }
+        onBackPressedCallback.isEnabled = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

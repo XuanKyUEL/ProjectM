@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
@@ -32,17 +31,17 @@ class TaskListActivity : BaseActivity() {
             }
         }
 
-    fun cardDetails(card: Card) {
+    fun cardDetails(
+        taskListPosition: Int,
+        cardPosition: Int,
+    ) {
         val intent = Intent(this, CardDetailsActivity::class.java)
-        startActivity(intent)
+        intent.putExtra(Constants.BOARD_DETAIL, boardDetails)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        startForMemberResult.launch(intent)
     }
 
-    private val onBackPressed =
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finish()
-            }
-        }
     private var boardDocumentId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +53,7 @@ class TaskListActivity : BaseActivity() {
         }
         loadingDialog.startLoadingDialog("Loading board's tasks...")
         fireStoreClass().getBoardDetails(this, boardDocumentId)
-        onBackPressedDispatcher.addCallback(this, onBackPressed)
+        onBackPress()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
