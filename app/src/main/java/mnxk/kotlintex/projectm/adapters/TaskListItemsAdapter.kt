@@ -52,7 +52,7 @@ open class TaskListItemsAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        val model = list[position]
+        val model = list[holder.absoluteAdapterPosition]
         if (holder is MyViewHolder) {
             Log.d(
                 "TAG_ibCloseListName_enabled",
@@ -150,8 +150,7 @@ open class TaskListItemsAdapter(
                 object : CardListItemsAdapter.OnClickListener {
                     override fun onClick(cardPosition: Int) {
                         if (context is TaskListActivity) {
-                            val card = model.cards[cardPosition]
-                            context.cardDetails(card)
+                            context.cardDetails(cardPosition, position)
                         }
                     }
                 },

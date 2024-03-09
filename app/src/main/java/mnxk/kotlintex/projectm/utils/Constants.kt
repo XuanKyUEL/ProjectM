@@ -6,6 +6,7 @@ import android.os.Bundle
 import java.io.Serializable
 
 object Constants {
+    val CARD_DETAIL: String = "cardDetail"
     val EMAIL: String = "email"
     val TASK_LIST: String = "taskList"
     val DOCUMENT_ID: String = "documentId"
@@ -25,6 +26,8 @@ object Constants {
     const val CREATE_BOARD_REQUEST_CODE = 13
     const val BOARD_DETAIL: String = "board_detail"
     const val ID: String = "id"
+    const val TASK_LIST_ITEM_POSITION: String = "task_list_item_position"
+    const val CARD_LIST_ITEM_POSITION: String = "card_list_item_position"
 }
 
 @Suppress("DEPRECATION")
