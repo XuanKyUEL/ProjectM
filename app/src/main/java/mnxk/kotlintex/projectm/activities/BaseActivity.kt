@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +24,40 @@ open class BaseActivity : AppCompatActivity() {
 
     var loadingDialog = LoadingDialog(this)
 
+    val onBackPressed =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_base)
         binding = ActivityBaseBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
+
+    fun showProgressDialog(text: String) {
+        loadingDialog.startLoadingDialog(text)
+    }
+
+    fun hideProgressDialog() {
+        loadingDialog.dismissDialog()
+    }
+
+    fun onBackPress() {
+        onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 
     fun getCurrentUserId(): String {
