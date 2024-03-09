@@ -22,6 +22,7 @@ class MembersActivity : BaseActivity() {
     private lateinit var boardDetails: Board
     private lateinit var binding: ActivityMembersBinding
     private lateinit var searchdialogBinding: DialogSearchMemberBinding
+    private lateinit var assignedMembersDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +43,23 @@ class MembersActivity : BaseActivity() {
     }
 
     fun setupMembersList(list: ArrayList<User>) {
+        assignedMembersDetailList = list
         loadingDialog.dismissDialog()
         binding.rvMembersList.layoutManager = LinearLayoutManager(this)
         binding.rvMembersList.setHasFixedSize(true)
         val adapter = MemberListItemsAdapter(this, list)
         binding.rvMembersList.adapter = adapter
+    }
+
+    fun memberDetails(user: User) {
+        boardDetails.assignedTo.add(user.id)
+        fireStoreClass().assignMemberToBoard(this, boardDetails, user)
+    }
+
+    fun memberAssignSuccess(user: User) {
+        assignedMembersDetailList.add(user)
+        loadingDialog.dismissDialog()
+        setupMembersList(assignedMembersDetailList)
     }
 
     private fun setupActionBar() {
@@ -85,8 +98,8 @@ class MembersActivity : BaseActivity() {
             val email = searchdialogBinding.etEmailSearchMember.text.toString()
             if (email.isNotEmpty()) {
                 dialog.dismiss()
-//                loadingDialog.startLoadingDialog("Adding member...")
-//                fireStoreClass().getMemberDetails(this, email)
+                loadingDialog.startLoadingDialog("Adding member...")
+                fireStoreClass().getMemberDetails(this, email)
             } else {
                 showErrorSnackBar("Please enter member's email address.")
                 // hide the dialog and keyboard

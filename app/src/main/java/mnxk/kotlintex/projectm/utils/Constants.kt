@@ -6,6 +6,7 @@ import android.os.Bundle
 import java.io.Serializable
 
 object Constants {
+    val EMAIL: String = "email"
     val TASK_LIST: String = "taskList"
     val DOCUMENT_ID: String = "documentId"
     const val BOARD_IMAGE: String = "board_image"
