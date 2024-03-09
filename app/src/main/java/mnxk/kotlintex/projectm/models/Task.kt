@@ -7,6 +7,7 @@ data class Task(
     val title: String = "",
     val createdBy: String = "",
     val cards: ArrayList<Card> = ArrayList(),
+    var stability: Int = 0,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

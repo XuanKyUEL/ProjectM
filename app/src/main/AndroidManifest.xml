@@ -17,6 +17,8 @@
         android:theme="@style/Theme.ProjectM"
         tools:targetApi="29">
         <activity
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".activities.CardDetailsActivity"
             android:exported="false" />
         <activity
