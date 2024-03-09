@@ -1,6 +1,9 @@
 package mnxk.kotlintex.projectm.activities
 
+import android.app.Dialog
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -8,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.adapters.MemberListItemsAdapter
 import mnxk.kotlintex.projectm.databinding.ActivityMembersBinding
+import mnxk.kotlintex.projectm.databinding.DialogSearchMemberBinding
 import mnxk.kotlintex.projectm.firebase.fireStoreClass
 import mnxk.kotlintex.projectm.models.Board
 import mnxk.kotlintex.projectm.models.User
@@ -17,6 +21,7 @@ import mnxk.kotlintex.projectm.utils.IntentUtils
 class MembersActivity : BaseActivity() {
     private lateinit var boardDetails: Board
     private lateinit var binding: ActivityMembersBinding
+    private lateinit var searchdialogBinding: DialogSearchMemberBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,5 +60,42 @@ class MembersActivity : BaseActivity() {
             }
         }
         binding.toolbarMembersActivity.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_add_member, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add_member -> {
+                dialogSearchMember()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun dialogSearchMember() {
+        val dialog = Dialog(this)
+        searchdialogBinding = DialogSearchMemberBinding.inflate(layoutInflater)
+        dialog.setContentView(searchdialogBinding.root)
+        searchdialogBinding.tvAdd.setOnClickListener {
+            val email = searchdialogBinding.etEmailSearchMember.text.toString()
+            if (email.isNotEmpty()) {
+                dialog.dismiss()
+//                loadingDialog.startLoadingDialog("Adding member...")
+//                fireStoreClass().getMemberDetails(this, email)
+            } else {
+                showErrorSnackBar("Please enter member's email address.")
+                // hide the dialog and keyboard
+                dialog.dismiss()
+            }
+        }
+        searchdialogBinding.tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }
