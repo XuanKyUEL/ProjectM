@@ -47,7 +47,7 @@ open class CardListItemsAdapter(
             holder.binding.tvCardName.text = model.name
             holder.itemView.setOnClickListener {
                 if (onClickListener != null) {
-                    onClickListener!!.onClick(holder.absoluteAdapterPosition)
+                    onClickListener!!.onClick(position)
                 }
             }
         }

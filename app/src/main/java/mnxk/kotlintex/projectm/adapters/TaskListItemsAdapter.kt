@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import mnxk.kotlintex.projectm.R
 import mnxk.kotlintex.projectm.activities.TaskListActivity
 import mnxk.kotlintex.projectm.databinding.ItemTaskBinding
+import mnxk.kotlintex.projectm.models.Board
 import mnxk.kotlintex.projectm.models.Task
 
 open class TaskListItemsAdapter(
     private val context: Context,
     private var list: ArrayList<Task>,
+    private val boardDetails: Board,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -150,7 +152,7 @@ open class TaskListItemsAdapter(
                 object : CardListItemsAdapter.OnClickListener {
                     override fun onClick(cardPosition: Int) {
                         if (context is TaskListActivity) {
-                            context.cardDetails(cardPosition, position)
+                            context.cardDetails(holder.absoluteAdapterPosition, cardPosition)
                         }
                     }
                 },

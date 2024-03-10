@@ -37,8 +37,8 @@ class TaskListActivity : BaseActivity() {
     ) {
         val intent = Intent(this, CardDetailsActivity::class.java)
         intent.putExtra(Constants.BOARD_DETAIL, boardDetails)
-        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
         startForMemberResult.launch(intent)
     }
 
@@ -96,7 +96,7 @@ class TaskListActivity : BaseActivity() {
         setUpActionBar()
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
-        val adapter = TaskListItemsAdapter(this, board.taskList)
+        val adapter = TaskListItemsAdapter(this, board.taskList, boardDetails)
         binding.rvTaskList.layoutManager =
             LinearLayoutManager(
                 this,
