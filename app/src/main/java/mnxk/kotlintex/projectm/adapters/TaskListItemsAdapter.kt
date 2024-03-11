@@ -54,7 +54,7 @@ open class TaskListItemsAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        val model = list[position]
+        val model = list[holder.absoluteAdapterPosition]
         if (holder is MyViewHolder) {
             Log.d(
                 "TAG_ibCloseListName_enabled",
